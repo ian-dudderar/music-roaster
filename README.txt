@@ -17,6 +17,12 @@ npm i dotenv
 create .env file
 require("dotenv").config(); in file
 use process.env.variable_name to use env variable
+git init
+git add .
+git commit -m "Initial Commit"
+git remote add github <project url>
+git remote -v
+git push github master
 
 
 Spotify Auth used here
