@@ -18,6 +18,9 @@ const openai = new OpenAI({
   apiKey: openai_key,
 });
 
+var text_response =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
 // Give express access to the styles folder
 app.use(express.static(path.join(__dirname, "/styles")));
 
@@ -25,27 +28,27 @@ app.use(express.static(path.join(__dirname, "/styles")));
 async function fetchTrackData(token) {
   var url = `${API_URL}tracks?limit=3`;
 
-  fetch(url, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-    });
-  // return new Promise((resolve, reject) => {
-  //   var url = `${API_URL}tracks?limit=3`;
-  //   fetch(url, {
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //     });
-  // });
+  // fetch(url, {
+  //   headers: {
+  //     Authorization: "Bearer " + token,
+  //   },
+  // })
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     console.log(result);
+  //   });
+  return new Promise((resolve, reject) => {
+    var url = `${API_URL}tracks?limit=3`;
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result.items);
+      });
+  });
 }
 
 function parseTrackData(track_data) {
@@ -62,49 +65,36 @@ function parseTrackData(track_data) {
   return tracks;
 }
 
-// async function fetchArtistData(token) {
-//   var url = `${API_URL}artists?limit=5`;
-//   fetch(url, {
-//     headers: {
-//       Authorization: "Bearer " + token,
-//     },
-//   })
-//     .then((response) => response.json())
-//     .then((result) => {
-//       data = result.items;
-//       parseTrackInfo(data);
-//     });
-// }
+async function roast_tracks(tracks) {
+  var inputString = "";
+  for (const track of tracks) {
+    var trackInfo = track.name + " by " + track.artist + ", ";
+    inputString += trackInfo;
+  }
 
-// async function printwords(tracks) {
-//   var inputString = "";
-//   for (const track of tracks) {
-//     var trackInfo = track.name + " by " + track.artist + ", ";
-//     inputString += trackInfo;
-//   }
+  console.log(inputString);
 
-//   const completion = await openai.chat.completions.create({
-//     model: "gpt-4o-mini",
-//     messages: [
-//       { role: "system", content: "You are a funny music critic." },
-//       {
-//         role: "user",
-//         content:
-//           "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-//           inputString,
-//       },
-//     ],
-//   });
-
-//   console.log(completion.choices[0].message.content);
-// }
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o-mini",
+  //   messages: [
+  //     { role: "system", content: "You are a funny music critic." },
+  //     {
+  //       role: "user",
+  //       content:
+  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+  //         inputString,
+  //     },
+  //   ],
+  // });
+  // console.log(completion.choices[0].message.content);
+}
 
 //---------End Helper Functions---------
 
 //-----Routes------
 
 app.get("/test", (req, res) => {
-  res.send({ message: "TEST DATA" });
+  res.send({ message: text_response });
 });
 
 // Index Page
@@ -164,19 +154,16 @@ app.get("/callback", (req, res) => {
     .then((response) => response.json())
     .then((result) => {
       var token = result.access_token;
-      res.redirect("/home?token=" + token);
+      res.redirect("/main?token=" + token);
     });
 });
 
-app.get("/home", async (req, res) => {
-  // console.log(req.query.token);
-  fetchTrackData(req.query.token);
+app.get("/main", async (req, res) => {
   // const track_data = await fetchTrackData(req.query.token);
-  // console.log(track_data);
   // const tracks = parseTrackData(track_data);
-  // console.log(tracks);
+  // roast_tracks(tracks);
 
-  res.sendFile("pages/home.html", { root: __dirname });
+  res.sendFile("pages/main.html", { root: __dirname });
 });
 //---------End Routes---------
 
