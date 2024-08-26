@@ -18,8 +18,14 @@ const openai = new OpenAI({
   apiKey: openai_key,
 });
 
-var text_response =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+var text_response = [
+  "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
+  "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
+  "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
+];
+
+// var text_response =
+//   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 // Give express access to the styles folder
 app.use(express.static(path.join(__dirname, "/styles")));
@@ -28,15 +34,6 @@ app.use(express.static(path.join(__dirname, "/styles")));
 async function fetchTrackData(token) {
   var url = `${API_URL}tracks?limit=3`;
 
-  // fetch(url, {
-  //   headers: {
-  //     Authorization: "Bearer " + token,
-  //   },
-  // })
-  //   .then((response) => response.json())
-  //   .then((result) => {
-  //     console.log(result);
-  //   });
   return new Promise((resolve, reject) => {
     var url = `${API_URL}tracks?limit=3`;
     fetch(url, {
@@ -72,21 +69,20 @@ async function roast_tracks(tracks) {
     inputString += trackInfo;
   }
 
-  console.log(inputString);
-
-  // const completion = await openai.chat.completions.create({
-  //   model: "gpt-4o-mini",
-  //   messages: [
-  //     { role: "system", content: "You are a funny music critic." },
-  //     {
-  //       role: "user",
-  //       content:
-  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-  //         inputString,
-  //     },
-  //   ],
-  // });
-  // console.log(completion.choices[0].message.content);
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: "You are a funny music critic." },
+      {
+        role: "user",
+        content:
+          "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+          inputString,
+      },
+    ],
+  });
+  llm_response = completion.choices[0].message.content;
+  text_response = llm_response.split("\n\n");
 }
 
 //---------End Helper Functions---------
@@ -161,6 +157,7 @@ app.get("/callback", (req, res) => {
 app.get("/main", async (req, res) => {
   // const track_data = await fetchTrackData(req.query.token);
   // const tracks = parseTrackData(track_data);
+  // console.log(tracks);
   // roast_tracks(tracks);
 
   res.sendFile("pages/main.html", { root: __dirname });
