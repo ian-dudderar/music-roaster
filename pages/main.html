@@ -7,22 +7,22 @@
     <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
   </head>
   <body>
-    <img
+    <!-- <img
       src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
       class="falling-image"
-    />
-    <!-- <div class="container"></div> -->
+    /> -->
+    <div class="container"></div>
     <script>
       function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
-      const images = [
-        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
-        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-      ];
-      // fetching();
+      // const images = [
+      //   "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+      //   "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+      //   "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+      // ];
+      fetching();
 
       // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
       // setTimeout(() => {
@@ -46,8 +46,8 @@
 
           //Creates a blinking cursor element, then deletes it before the next cycle
           let cursor = await textTypewriterEffect(paragraph, text);
-          // await sleep(4000);
-          // paragraph.removeChild(cursor);
+          await sleep(4000);
+          paragraph.removeChild(cursor);
         }
       }
 
@@ -60,15 +60,15 @@
             const cursor = document.createElement("span");
             cursor.classList.add("cursor");
             cursor.innerHTML = "|";
-            // element.appendChild(cursor);
+            element.appendChild(cursor);
             return resolve(cursor);
           } else {
             //Slightly randomizes the speed of the typewriter
-            // return setTimeout(
-            //   () => resolve(textTypewriterEffect(element, text, i + 1)),
-            //   Math.floor(Math.random() * (30 - 0 + 1) + 0)
-            // );
-            return resolve(textTypewriterEffect(element, text, i + 1));
+            return setTimeout(
+              () => resolve(textTypewriterEffect(element, text, i + 1)),
+              Math.floor(Math.random() * (30 - 0 + 1) + 0)
+            );
+            // return resolve(textTypewriterEffect(element, text, i + 1));
           }
         });
       }
