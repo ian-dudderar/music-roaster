@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>INDEX</title>
     <link href="global.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
@@ -11,18 +12,20 @@
       src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
       class="falling-image"
     /> -->
+    <!-- <h1 class="title">HOW BAD IS YOUR <span class="spotify">SPOTIFY</span>?</h1> -->
     <div class="container"></div>
     <script>
       function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
-      // const images = [
-      //   "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
-      //   "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-      //   "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-      // ];
+      const images = [
+        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+      ];
       fetching();
+      fallingImages(images);
 
       // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
       // setTimeout(() => {
@@ -37,17 +40,32 @@
           .catch((error) => console.error(error));
       }
 
+      async function fallingImages(images) {
+        while (true) {
+          var image = document.createElement("img");
+          image.classList.add("falling-image");
+          var randomIndex = Math.floor(Math.random() * images.length);
+          var randomSize = Math.floor(Math.random() * (200 - 50) + 50);
+          image.src = images[randomIndex];
+          image.style.left = Math.random() * +innerWidth + "px";
+          image.style.height = randomSize + "px";
+          image.style.width = randomSize + "px";
+          document.body.appendChild(image);
+          await sleep(Math.random(3) * 1000 + 1000);
+        }
+      }
+
       async function textDelay(text_array) {
         for (const text of text_array) {
           //Creates the element for the response text and passes them both to the typewriter effect
           const paragraph = document.createElement("p");
-          paragraph.classList.add("response-text");
+          paragraph.classList.add("response");
           document.querySelector(".container").appendChild(paragraph);
 
           //Creates a blinking cursor element, then deletes it before the next cycle
           let cursor = await textTypewriterEffect(paragraph, text);
-          await sleep(4000);
-          paragraph.removeChild(cursor);
+          // await sleep(4000);
+          // paragraph.removeChild(cursor);
         }
       }
 
@@ -60,15 +78,15 @@
             const cursor = document.createElement("span");
             cursor.classList.add("cursor");
             cursor.innerHTML = "|";
-            element.appendChild(cursor);
+            // element.appendChild(cursor);
             return resolve(cursor);
           } else {
             //Slightly randomizes the speed of the typewriter
-            return setTimeout(
-              () => resolve(textTypewriterEffect(element, text, i + 1)),
-              Math.floor(Math.random() * (30 - 0 + 1) + 0)
-            );
-            // return resolve(textTypewriterEffect(element, text, i + 1));
+            // return setTimeout(
+            //   () => resolve(textTypewriterEffect(element, text, i + 1)),
+            //   Math.floor(Math.random() * (30 - 0 + 1) + 0)
+            // );
+            return resolve(textTypewriterEffect(element, text, i + 1));
           }
         });
       }
