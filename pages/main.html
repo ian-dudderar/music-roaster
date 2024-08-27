@@ -2,16 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
     <title>INDEX</title>
     <link href="global.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
   </head>
   <body>
-    <!-- <img
-      src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-      class="falling-image"
-    /> -->
     <!-- <h1 class="title">HOW BAD IS YOUR <span class="spotify">SPOTIFY</span>?</h1> -->
     <div class="container"></div>
     <script>
@@ -45,7 +44,7 @@
           var image = document.createElement("img");
           image.classList.add("falling-image");
           var randomIndex = Math.floor(Math.random() * images.length);
-          var randomSize = Math.floor(Math.random() * (200 - 50) + 50);
+          var randomSize = Math.floor(Math.random() * (400 - 200) + 200);
           image.src = images[randomIndex];
           image.style.left = Math.random() * +innerWidth + "px";
           image.style.height = randomSize + "px";
@@ -65,7 +64,7 @@
           //Creates a blinking cursor element, then deletes it before the next cycle
           let cursor = await textTypewriterEffect(paragraph, text);
           // await sleep(4000);
-          // paragraph.removeChild(cursor);
+          paragraph.removeChild(cursor);
         }
       }
 
@@ -73,12 +72,13 @@
       function textTypewriterEffect(element, text, i = 0) {
         return new Promise((resolve) => {
           element.textContent += text[i];
+          element.scrollIntoView();
           if (i === text.length - 1) {
             // Create a blinking cursor element and appends it
             const cursor = document.createElement("span");
             cursor.classList.add("cursor");
             cursor.innerHTML = "|";
-            // element.appendChild(cursor);
+            element.appendChild(cursor);
             return resolve(cursor);
           } else {
             //Slightly randomizes the speed of the typewriter
