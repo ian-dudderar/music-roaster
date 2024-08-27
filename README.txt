@@ -1,3 +1,10 @@
+npm run start
+
+Spotify Auth used here
+https://developer.spotify.com/documentation/web-api/tutorials/code-flow
+
+
+// These are more relevant to node/express in general, not this project. I need to move them somewhere else
 npm init -y 
 npm i express
 npm i -D nodemon
@@ -25,5 +32,3 @@ git remote -v
 git push github master
 
 
-Spotify Auth used here
-https://developer.spotify.com/documentation/web-api/tutorials/code-flow

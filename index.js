@@ -32,10 +32,10 @@ app.use(express.static(path.join(__dirname, "/styles")));
 
 //-----Helper Functions------
 async function fetchTrackData(token) {
-  var url = `${API_URL}tracks?limit=3`;
+  const url = `${API_URL}tracks?limit=10`;
 
   return new Promise((resolve, reject) => {
-    var url = `${API_URL}tracks?limit=3`;
+    // var url = `${API_URL}tracks?limit=3`;
     fetch(url, {
       headers: {
         Authorization: "Bearer " + token,
@@ -65,24 +65,27 @@ function parseTrackData(track_data) {
 async function roast_tracks(tracks) {
   var inputString = "";
   for (const track of tracks) {
-    var trackInfo = track.name + " by " + track.artist + ", ";
-    inputString += trackInfo;
+    console.log(track.album_image)
   }
+  // for (const track of tracks) {
+  //   var trackInfo = track.name + " by " + track.artist + ", ";
+  //   inputString += trackInfo;
+  // }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "You are a funny music critic." },
-      {
-        role: "user",
-        content:
-          "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-          inputString,
-      },
-    ],
-  });
-  llm_response = completion.choices[0].message.content;
-  text_response = llm_response.split("\n\n");
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o-mini",
+  //   messages: [
+  //     { role: "system", content: "You are a funny music critic." },
+  //     {
+  //       role: "user",
+  //       content:
+  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+  //         inputString,
+  //     },
+  //   ],
+  // });
+  // llm_response = completion.choices[0].message.content;
+  // text_response = llm_response.split("\n\n");
 }
 
 //---------End Helper Functions---------

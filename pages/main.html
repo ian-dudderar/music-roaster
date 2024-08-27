@@ -22,8 +22,17 @@
         "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
         "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
         "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+        "https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241",
+        "https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1",
+        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+        "https://i.scdn.co/image/ab67616d0000b2736b405be80472a13cd4b2e80b",
+        "https://i.scdn.co/image/ab67616d0000b27306596cef717cbdce8b874778",
+        "https://i.scdn.co/image/ab67616d0000b2731da4d9f0f6af58d5e2ad9852",
+        "https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
       ];
       fetching();
+      // populateBackground(images) 
       fallingImages(images);
 
       // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
@@ -39,6 +48,25 @@
           .catch((error) => console.error(error));
       }
 
+      function populateBackground(images) {
+        for (let i = 0; i < 100; i++) {
+          var image = document.createElement("img");
+          image.classList.add("static-image");
+          // image.classList.add("falling-image");
+          var randomIndex = Math.floor(Math.random() * images.length);
+          var randomSize = Math.floor(Math.random() * (400 - 200) + 200);
+          var randomStartHeight = Math.floor(Math.random() * (800 + 200) - 200)
+          image.src = images[randomIndex];
+          image.style.left = Math.random() * +innerWidth + "px";
+          image.style.height = randomSize + "px";
+          image.style.width = randomSize + "px";
+          image.style.top = randomStartHeight + "px";
+          console.log(randomStartHeight)
+          document.body.appendChild(image);
+
+        }
+      }
+
       async function fallingImages(images) {
         while (true) {
           var image = document.createElement("img");
@@ -49,6 +77,7 @@
           image.style.left = Math.random() * +innerWidth + "px";
           image.style.height = randomSize + "px";
           image.style.width = randomSize + "px";
+          image.style.top = "-400px"
           document.body.appendChild(image);
           await sleep(Math.random(3) * 1000 + 1000);
         }
