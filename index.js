@@ -168,6 +168,6 @@ app.get("/main", async (req, res) => {
 });
 //---------End Routes---------
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Listening on port ${LOCAL_URL}`);
 });
