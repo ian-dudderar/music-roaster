@@ -30,15 +30,7 @@ body {
 }
 
 footer {
-  background: #333;
-  color: white;
-  padding: 3em;
-  margin-top: auto;
-}
-
-.logos-slide {
-  display: inline-block;
-  animation: 15s slide infinite linear;
+  padding: 1em 0;
   margin-top: auto;
 }
 
@@ -46,6 +38,57 @@ footer {
   white-space: nowrap;
   overflow: hidden;
   padding: 10px 0;
+  position: relative;
+}
+
+.logos:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 100%;
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  content: "";
+  z-index: 2;
+}
+
+.logos:before,
+.logos:after {
+  position: absolute;
+  top: 0;
+  width: 10%;
+  height: 100%;
+
+  content: "";
+  z-index: 2;
+}
+
+.logos:before {
+  left: 0;
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.logos:after {
+  right: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.logos-slide {
+  display: inline-block;
+  animation: 15s slide infinite linear;
+  margin-top: auto;
 }
 
 .logos-slide img {
