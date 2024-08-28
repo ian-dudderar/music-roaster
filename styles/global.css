@@ -36,6 +36,32 @@ footer {
   margin-top: auto;
 }
 
+.logos-slide {
+  display: inline-block;
+  animation: 15s slide infinite linear;
+  margin-top: auto;
+}
+
+.logos {
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+.logos-slide img {
+  height: 100px;
+  margin: 0 20px;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 /* html {
   min-height: 100%;
   margin: 0;
