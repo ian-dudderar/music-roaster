@@ -11,6 +11,7 @@ const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const openai_key = process.env.OPENAI_KEY;
 
+const LOCAL_URL = process.env.LOCAL_URL;
 const API_URL = "https://api.spotify.com/v1/me/top/";
 
 const { OpenAI } = require("openai");
@@ -112,7 +113,7 @@ app.get("/authenticate", (req, res) => {
         scope: scope,
         state: state,
         show_dialog: true,
-        redirect_uri: "http://localhost:3000/callback",
+        redirect_uri: `${LOCAL_URL}/callback`,
         client_id: client_id,
       })
   );
@@ -141,7 +142,7 @@ app.get("/callback", (req, res) => {
   const urlencoded = new URLSearchParams();
   urlencoded.append("grant_type", "authorization_code");
   urlencoded.append("code", code);
-  urlencoded.append("redirect_uri", "http://localhost:3000/callback");
+  urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
@@ -168,5 +169,5 @@ app.get("/main", async (req, res) => {
 //---------End Routes---------
 
 app.listen(port, () => {
-  console.log(`Listening on port http://localhost:${port}`);
+  console.log(`Listening on port ${LOCAL_URL}`);
 });
