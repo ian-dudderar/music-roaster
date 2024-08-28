@@ -65,7 +65,7 @@ function parseTrackData(track_data) {
 async function roast_tracks(tracks) {
   var inputString = "";
   for (const track of tracks) {
-    console.log(track.album_image)
+    console.log(track.album_image);
   }
   // for (const track of tracks) {
   //   var trackInfo = track.name + " by " + track.artist + ", ";
