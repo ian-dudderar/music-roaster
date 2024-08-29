@@ -1,155 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-    />
-    <title>INDEX</title>
-    <link href="global.css" rel="stylesheet" type="text/css" />
-    <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
-  </head>
-  <body>
-    <!-- <h1 class="title">HOW BAD IS YOUR <span class="spotify">SPOTIFY</span>?</h1> -->
-    <!-- <div class="title">Spotify</div> -->
-    <div class="container"></div>
-    <footer>
-      <div class="logos">
-        <div class="logos-slide">
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
-          />
-        </div>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>INDEX</title>
+  <link href="global.css" rel="stylesheet" type="text/css" />
+  <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
+</head>
+
+<body>
+  <div class="container">
+    <main>
+      <div class="text-content">
+              <p>Sit back, relax, and let the music speak for itself. Your rating is being calculated now.</p>
+              <div class="progress-bar"></div>
       </div>
-    </footer>
-    <script>
-      var slide = document.querySelector(".logos-slide");
-      var copy = slide.cloneNode(true);
-      document.querySelector(".logos").appendChild(copy);
+    </main>
+    <!-- <footer>
+        <div class="logos">
+          <div class="logos-slide">
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
+            />
+          </div>
+          <div class="logos-slide">
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
+            />
+            <img
+              src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
+            />
+          </div>
+        </div>
+      </footer> -->
+  </div>
+  <script>
+    // var slide = document.querySelector(".logos-slide");
+    // var copy = slide.cloneNode(true);
+    // document.querySelector(".logos").appendChild(copy);
 
-      function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    const intro = [
+      "Sit back, relax, and let the music speak for itself. Your rating is being calculated now."
+    ]
+
+    const images = [
+      "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+      "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+      "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+      "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+      "https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241",
+      "https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1",
+      "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+      "https://i.scdn.co/image/ab67616d0000b2736b405be80472a13cd4b2e80b",
+      "https://i.scdn.co/image/ab67616d0000b27306596cef717cbdce8b874778",
+      "https://i.scdn.co/image/ab67616d0000b2731da4d9f0f6af58d5e2ad9852",
+      "https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288",
+    ];
+    // fetching();
+    // populateBackground(images)
+    // fallingImages(images);
+
+    // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
+    // setTimeout(() => {
+    //   fetching();
+    // }, 8000);
+
+    //Also BAD, just here to have a callable function after the timeout above
+    function fetching() {
+      fetch("/test")
+        .then((response) => response.json())
+        .then((data) => textDelay(data.message))
+        .catch((error) => console.error(error));
+    }
+
+    // textDelay(intro);
+
+    async function textDelay(text_array) {
+      for (const text of text_array) {
+        //Creates the element for the response text and passes them both to the typewriter effect
+        const paragraph = document.createElement("p");
+        paragraph.classList.add("response");
+        document.querySelector(".text-content").appendChild(paragraph);
+
+        //Creates a blinking cursor element, then deletes it before the next cycle
+        let cursor = await textTypewriterEffect(paragraph, text);
+        await sleep(4000);
+        paragraph.removeChild(cursor);
       }
+    }
 
-      const images = [
-        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
-        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
-        "https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241",
-        "https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1",
-        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
-        "https://i.scdn.co/image/ab67616d0000b2736b405be80472a13cd4b2e80b",
-        "https://i.scdn.co/image/ab67616d0000b27306596cef717cbdce8b874778",
-        "https://i.scdn.co/image/ab67616d0000b2731da4d9f0f6af58d5e2ad9852",
-        "https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288",
-      ];
-      fetching();
-      // populateBackground(images)
-      // fallingImages(images);
-
-      // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
-      // setTimeout(() => {
-      //   fetching();
-      // }, 8000);
-
-      //Also BAD, just here to have a callable function after the timeout above
-      function fetching() {
-        fetch("/test")
-          .then((response) => response.json())
-          .then((data) => textDelay(data.message))
-          .catch((error) => console.error(error));
-      }
-
-      function populateBackground(images) {
-        for (let i = 0; i < 100; i++) {
-          var image = document.createElement("img");
-          image.classList.add("static-image");
-          // image.classList.add("falling-image");
-          var randomIndex = Math.floor(Math.random() * images.length);
-          var randomSize = Math.floor(Math.random() * (400 - 200) + 200);
-          var randomStartHeight = Math.floor(Math.random() * (800 + 200) - 200);
-          image.src = images[randomIndex];
-          image.style.left = Math.random() * +innerWidth + "px";
-          image.style.height = randomSize + "px";
-          image.style.width = randomSize + "px";
-          image.style.top = randomStartHeight + "px";
-          console.log(randomStartHeight);
-          document.body.appendChild(image);
+    // Function to simulate typewriter effect
+    function textTypewriterEffect(element, text, i = 0) {
+      return new Promise((resolve) => {
+        element.textContent += text[i];
+        element.scrollIntoView();
+        if (i === text.length - 1) {
+          // Create a blinking cursor element and appends it
+          const cursor = document.createElement("span");
+          cursor.classList.add("cursor");
+          cursor.innerHTML = "|";
+          element.appendChild(cursor);
+          return resolve(cursor);
+        } else {
+          //Slightly randomizes the speed of the typewriter
+          return setTimeout(
+            () => resolve(textTypewriterEffect(element, text, i + 1)),
+            Math.floor(Math.random() * (30 - 0 + 1) + 0)
+          );
+          // return resolve(textTypewriterEffect(element, text, i + 1));
         }
-      }
+      });
+    }
+  </script>
+</body>
 
-      async function fallingImages(images) {
-        while (true) {
-          var image = document.createElement("img");
-          image.classList.add("falling-image");
-          var randomIndex = Math.floor(Math.random() * images.length);
-          var randomSize = Math.floor(Math.random() * (400 - 200) + 200);
-          image.src = images[randomIndex];
-          image.style.left = Math.random() * +innerWidth + "px";
-          image.style.height = randomSize + "px";
-          image.style.width = randomSize + "px";
-          image.style.top = "-400px";
-          document.body.appendChild(image);
-          await sleep(Math.random(3) * 1000 + 1000);
-        }
-      }
-
-      async function textDelay(text_array) {
-        for (const text of text_array) {
-          //Creates the element for the response text and passes them both to the typewriter effect
-          const paragraph = document.createElement("p");
-          paragraph.classList.add("response");
-          document.querySelector(".container").appendChild(paragraph);
-
-          //Creates a blinking cursor element, then deletes it before the next cycle
-          let cursor = await textTypewriterEffect(paragraph, text);
-          // await sleep(4000);
-          // paragraph.removeChild(cursor);
-        }
-      }
-
-      // Function to simulate typewriter effect
-      function textTypewriterEffect(element, text, i = 0) {
-        return new Promise((resolve) => {
-          element.textContent += text[i];
-          element.scrollIntoView();
-          if (i === text.length - 1) {
-            // Create a blinking cursor element and appends it
-            const cursor = document.createElement("span");
-            cursor.classList.add("cursor");
-            cursor.innerHTML = "|";
-            element.appendChild(cursor);
-            return resolve(cursor);
-          } else {
-            //Slightly randomizes the speed of the typewriter
-            // return setTimeout(
-            //   () => resolve(textTypewriterEffect(element, text, i + 1)),
-            //   Math.floor(Math.random() * (30 - 0 + 1) + 0)
-            // );
-            return resolve(textTypewriterEffect(element, text, i + 1));
-          }
-        });
-      }
-    </script>
-  </body>
 </html>
