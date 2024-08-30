@@ -77,6 +77,22 @@
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get('code')
+    const state = urlParams.get('state')
+    test();
+
+    async function test() {
+      await sleep(4000);
+      fetch(`/token?code=${code}`).then((res) => {
+        const loader = document.querySelector(".progress-bar");
+        loader.style.display = "none"
+
+      })
+    }
+
+    // fetch(`/token?code=${code}&state=${state}`);
+
     const intro = [
       "Sit back, relax, and let the music speak for itself. Your rating is being calculated now."
     ]

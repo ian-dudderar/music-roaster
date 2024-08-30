@@ -121,41 +121,54 @@ app.get("/authenticate", (req, res) => {
 
 // Callback function for spotify authentication
 app.get("/callback", (req, res) => {
-  var code = req.query.code || null;
-  var state = req.query.state || null;
+  
+
+  res.sendFile("pages/main.html", { root: __dirname });
+
 
   // Check to ensure the user has been properly authenticated
-  if (state === null) {
-    res.redirect("/" + querystring.stringify({ error: "State mismatch" }));
-  } else if (code === null) {
-    res.redirect("/" + querystring.stringify({ error: "Login failed" }));
-  }
+  // if (state === null) {
+  //   res.redirect("/" + querystring.stringify({ error: "State mismatch" }));
+  // } else if (code === null) {
+  //   res.redirect("/" + querystring.stringify({ error: "Login failed" }));
+  // }
 
-  // Exchange the authorization code for an access token
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  myHeaders.append(
-    "Authorization",
-    `Basic ` +
-      new Buffer.from(client_id + ":" + client_secret).toString("base64")
-  );
-  const urlencoded = new URLSearchParams();
-  urlencoded.append("grant_type", "authorization_code");
-  urlencoded.append("code", code);
-  urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: urlencoded,
-  };
+  // // Exchange the authorization code for an access token
+  // const myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  // myHeaders.append(
+  //   "Authorization",
+  //   `Basic ` +
+  //     new Buffer.from(client_id + ":" + client_secret).toString("base64")
+  // );
+  // const urlencoded = new URLSearchParams();
+  // urlencoded.append("grant_type", "authorization_code");
+  // urlencoded.append("code", code);
+  // urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
+  // const requestOptions = {
+  //   method: "POST",
+  //   headers: myHeaders,
+  //   body: urlencoded,
+  // };
 
-  // One the access token is received, redirects the user to the user page and passes the token
-  fetch("https://accounts.spotify.com/api/token", requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      var token = result.access_token;
-      res.redirect("/main?token=" + token);
-    });
+  // // One the access token is received, redirects the user to the user page and passes the token
+  // fetch("https://accounts.spotify.com/api/token", requestOptions)
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     var token = result.access_token;
+  //     res.redirect("/main?token=" + token);
+  //   });
+});
+
+app.get("/token", async(req, res) => {
+  var code = req.query.code || null;
+  var state = req.query.state || null;
+  console.log("hit")
+
+  console.log(code)
+  res.sendFile("pages/index.html", { root: __dirname})
+  
+
 });
 
 app.get("/main", async (req, res) => {
