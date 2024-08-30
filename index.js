@@ -19,22 +19,47 @@ const openai = new OpenAI({
   apiKey: openai_key,
 });
 
-var text_response = [
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
-  "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-  "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-];
-
-// var text_response =
-//   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
 // Give express access to the styles folder
 app.use(express.static(path.join(__dirname, "/styles")));
 
 //-----Helper Functions------
-async function fetchTrackData(token) {
-  const url = `${API_URL}tracks?limit=10`;
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function getAccessToken(code) {
+  return new Promise((resolve, reject) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    myHeaders.append(
+      "Authorization",
+      `Basic ` +
+        new Buffer.from(client_id + ":" + client_secret).toString("base64")
+    );
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("grant_type", "authorization_code");
+    urlencoded.append("code", code);
+    urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+    };
+
+    fetch("https://accounts.spotify.com/api/token", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        var token = result.access_token;
+        resolve(token);
+      });
+  });
+}
+
+async function fetchTrackData(token) {
+  console.log("fetching");
+
+  const url = `${API_URL}tracks?limit=10`;
   return new Promise((resolve, reject) => {
     // var url = `${API_URL}tracks?limit=3`;
     fetch(url, {
@@ -44,12 +69,13 @@ async function fetchTrackData(token) {
     })
       .then((response) => response.json())
       .then((result) => {
-        resolve(result.items);
+        resolve(parseTrackData(result.items));
       });
   });
 }
 
 function parseTrackData(track_data) {
+  console.log("parsing...");
   var tracks = [];
   for (const data of track_data) {
     var track = {
@@ -64,10 +90,22 @@ function parseTrackData(track_data) {
 }
 
 async function roast_tracks(tracks) {
-  var inputString = "";
-  for (const track of tracks) {
-    console.log(track.album_image);
-  }
+  console.log("sleeping...");
+  // await sleep(2000);
+  console.log("done sleeping");
+  var res = [
+    "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
+    "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
+    "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
+  ];
+
+  return res;
+
+  // var inputString = "";
+
+  // for (const track of tracks) {
+  //   console.log(track.album_image);
+  // }
   // for (const track of tracks) {
   //   var trackInfo = track.name + " by " + track.artist + ", ";
   //   inputString += trackInfo;
@@ -93,10 +131,6 @@ async function roast_tracks(tracks) {
 
 //-----Routes------
 
-app.get("/test", (req, res) => {
-  res.send({ message: text_response });
-});
-
 // Index Page
 app.get("/", (req, res) => {
   res.sendFile("pages/index.html", { root: __dirname });
@@ -121,64 +155,40 @@ app.get("/authenticate", (req, res) => {
 
 // Callback function for spotify authentication
 app.get("/callback", (req, res) => {
-  
-
   res.sendFile("pages/main.html", { root: __dirname });
-
-
-  // Check to ensure the user has been properly authenticated
-  // if (state === null) {
-  //   res.redirect("/" + querystring.stringify({ error: "State mismatch" }));
-  // } else if (code === null) {
-  //   res.redirect("/" + querystring.stringify({ error: "Login failed" }));
-  // }
-
-  // // Exchange the authorization code for an access token
-  // const myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  // myHeaders.append(
-  //   "Authorization",
-  //   `Basic ` +
-  //     new Buffer.from(client_id + ":" + client_secret).toString("base64")
-  // );
-  // const urlencoded = new URLSearchParams();
-  // urlencoded.append("grant_type", "authorization_code");
-  // urlencoded.append("code", code);
-  // urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: myHeaders,
-  //   body: urlencoded,
-  // };
-
-  // // One the access token is received, redirects the user to the user page and passes the token
-  // fetch("https://accounts.spotify.com/api/token", requestOptions)
-  //   .then((response) => response.json())
-  //   .then((result) => {
-  //     var token = result.access_token;
-  //     res.redirect("/main?token=" + token);
-  //   });
-});
-
-app.get("/token", async(req, res) => {
-  var code = req.query.code || null;
-  var state = req.query.state || null;
-  console.log("hit")
-
-  console.log(code)
-  res.sendFile("pages/index.html", { root: __dirname})
-  
-
 });
 
 app.get("/main", async (req, res) => {
-  // const track_data = await fetchTrackData(req.query.token);
-  // const tracks = parseTrackData(track_data);
-  // console.log(tracks);
-  // roast_tracks(tracks);
+  var code = req.query.code || null;
+  var state = req.query.state || null;
 
-  res.sendFile("pages/main.html", { root: __dirname });
+  // Check to ensure the user has been properly authenticated
+  if (state === null) {
+    res.redirect("/" + querystring.stringify({ error: "State mismatch" }));
+  } else if (code === null) {
+    res.redirect("/" + querystring.stringify({ error: "Login failed" }));
+  }
+
+  // Exchange the authorization code for an access token
+  // One the access token is received, redirects the user to the user page and passes the token
+  const token = await getAccessToken(code);
+  const tracks = await fetchTrackData(token);
+  const text_res = await roast_tracks(tracks);
+  var albums = [];
+  for (const track of tracks) {
+    albums.push(track.album_image);
+  }
+
+  const data_response = {
+    albums_res: albums,
+    text_res: text_res,
+  };
+
+  // console.log(data_response);
+
+  res.send({ response: data_response });
 });
+
 //---------End Routes---------
 
 app.listen(process.env.PORT || port, () => {
