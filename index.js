@@ -103,30 +103,28 @@ async function roast_tracks(tracks) {
 
   var inputString = "";
 
-  for (const track of tracks) {
-    console.log(track.album_image);
-  }
-  for (const track of tracks) {
-    var trackInfo = track.name + " by " + track.artist + ", ";
-    inputString += trackInfo;
-  }
+  // for (const track of tracks) {
+  //   var trackInfo = track.name + " by " + track.artist + ", ";
+  //   inputString += trackInfo;
+  // }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "You are a funny music critic." },
-      {
-        role: "user",
-        content:
-          "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-          inputString,
-      },
-    ],
-  });
-  llm_response = completion.choices[0].message.content;
-  text_response = llm_response.split("\n\n");
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o-mini",
+  //   messages: [
+  //     { role: "system", content: "You are a funny music critic." },
+  //     {
+  //       role: "user",
+  //       content:
+  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+  //         inputString,
+  //     },
+  //   ],
+  // });
+  // llm_response = completion.choices[0].message.content;
+  // text_response = llm_response.split("\n\n");
 
-  return text_response;
+  return "";
+  // return text_response;
 }
 
 //---------End Helper Functions---------
