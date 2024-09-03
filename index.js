@@ -93,43 +93,49 @@ async function roast_tracks(tracks) {
   console.log("sleeping...");
   // await sleep(2000);
   console.log("done sleeping");
-  var res = [
-    "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
-    "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-    "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-  ];
+  // var res = [
+  //   "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
+  //   "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
+  //   "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
+  // ];
 
-  return res;
+  // return res;
 
-  // var inputString = "";
+  var inputString = "";
 
-  // for (const track of tracks) {
-  //   console.log(track.album_image);
-  // }
-  // for (const track of tracks) {
-  //   var trackInfo = track.name + " by " + track.artist + ", ";
-  //   inputString += trackInfo;
-  // }
+  for (const track of tracks) {
+    console.log(track.album_image);
+  }
+  for (const track of tracks) {
+    var trackInfo = track.name + " by " + track.artist + ", ";
+    inputString += trackInfo;
+  }
 
-  // const completion = await openai.chat.completions.create({
-  //   model: "gpt-4o-mini",
-  //   messages: [
-  //     { role: "system", content: "You are a funny music critic." },
-  //     {
-  //       role: "user",
-  //       content:
-  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-  //         inputString,
-  //     },
-  //   ],
-  // });
-  // llm_response = completion.choices[0].message.content;
-  // text_response = llm_response.split("\n\n");
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: "You are a funny music critic." },
+      {
+        role: "user",
+        content:
+          "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+          inputString,
+      },
+    ],
+  });
+  llm_response = completion.choices[0].message.content;
+  text_response = llm_response.split("\n\n");
+
+  return text_response;
 }
 
 //---------End Helper Functions---------
 
 //-----Routes------
+
+app.get("/test", (req, res) => {
+  res.sendFile("pages/test.html", { root: __dirname });
+});
 
 // Index Page
 app.get("/", (req, res) => {

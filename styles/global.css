@@ -5,36 +5,70 @@
   --spotify-text: #ffffff;
 }
 
-body,
 html {
-  margin: 0;
-  padding: 0;
+  height: 100;
+  /* margin: 20px 0px 0px 0px; */
+  /* padding: 20px 0px 0px 0px; */
   font-family: Arial, sans-serif;
   background-color: var(--spotify-black);
   color: var(--spotify-text);
-  height: 100%;
-  overflow: scroll;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
 }
 
 main {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  height: 100%;
 }
 
-.text-content {
-  max-width: 90%;
-  text-align: center;
-  padding-top: 2rem;
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  /* padding-top: 70px; */
+}
+
+.header {
+  background-color: var(--spotify-black);
+  height: 30px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  /* display: flex;
+  flex-direction: column;
+  color: #191414; */
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 0 40px;
+  text-align: center;
+  /* height: 100%; */
+}
+
+.text-container {
+  padding: 20px 20px;
+}
+
+.intro {
+  /* max-width: 90%; */
+  text-align: center;
+  /* padding-top: 2rem; */
+  margin: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fader 3s ease;
+  /* align-items: center; */
+  /* overflow: scroll; */
 }
 
 p {
@@ -60,7 +94,10 @@ p {
   letter-spacing: 2px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
+  margin: auto;
+  /* visibility: hidden; */
+  /* animation: fader 2s ease; */
 }
 
 .enter-button:hover {
@@ -100,48 +137,6 @@ p {
 html {
   height: 100%;
 }
-/* 
-body {
-  margin: 0;
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-
-  background: radial-gradient(
-    at top,
-    rgba(225, 248, 230, 1) 0%,
-    rgba(247, 247, 247, 1) 100%
-  );
-
-}
-
-button {
-  height: 200px;
-  width: 200px;
-}
-
-.title {
-  text-align: center;
-  margin: 0 0 0.5em;
-  text-transform: uppercase;
-  font-weight: 900;
-  font-size: 3rem;
-  color: #1db954;
-  line-height: 0.8;
-}
-
-.container {
-  padding: 3rem 5rem;
-  height: auto;
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  color: #191414;
-
-} */
 
 footer {
   padding: 1em 0;
@@ -213,5 +208,15 @@ footer {
 @keyframes blinker {
   50% {
     opacity: 0;
+  }
+}
+
+@keyframes fader {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

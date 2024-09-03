@@ -6,84 +6,61 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <title>Rate My Music</title>
-    <link href="global.css" rel="stylesheet" type="text/css" />
+    <title>INDEX</title>
+    <link href="test.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
   </head>
-
   <body>
-    <!-- This header is my really broken way of adding padding to the top of the page-->
-    <div class="header"></div>
-    <div class="container">
-      <div class="loading-container">
-        <p id="loading-prompt">
-          Sit back, relax, and let the music speak for itself. Your rating is
-          being calculated now.
-        </p>
-        <div class="progress-bar"></div>
+    <div class="container"></div>
+    <footer>
+      <div class="logos">
+        <div class="logos-slide">
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
+          />
+          <img
+            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
+          />
+        </div>
       </div>
-      <div class="text-container"></div>
-    </div>
-    <!-- </main> -->
-    <footer class="footer">
-      <!-- <div class="logos">
-        <div class="logos-slide">
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
-          />
-        </div>
-        <div class="logos-slide">
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
-          />
-        </div>
-      </div> -->
     </footer>
     <script>
-      // var slide = document.querySelector(".logos-slide");
-      // var copy = slide.cloneNode(true);
-      // document.querySelector(".logos").appendChild(copy);
+      var slide = document.querySelector(".logos-slide");
+      var copy = slide.cloneNode(true);
+      document.querySelector(".logos").appendChild(copy);
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-      const state = urlParams.get("state");
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
 
+      const images = [
+        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+        "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+        "https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241",
+        "https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1",
+        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+        "https://i.scdn.co/image/ab67616d0000b2736b405be80472a13cd4b2e80b",
+        "https://i.scdn.co/image/ab67616d0000b27306596cef717cbdce8b874778",
+        "https://i.scdn.co/image/ab67616d0000b2731da4d9f0f6af58d5e2ad9852",
+        "https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288",
+      ];
       var res = [
         "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
         "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
@@ -91,60 +68,36 @@
         "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
         "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
       ];
-      // textDelay(res);
-      onLoad();
+      textDelay(res);
+      // fetching();
+      // populateBackground(images)
 
-      function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
+      // fallingImages(images);
+
+      // This is BAD i am doing this to stall until the LLM is finished, I need a better way to do it
+      // setTimeout(() => {
+      //   fetching();
+      // }, 8000);
+
+      //Also BAD, just here to have a callable function after the timeout above
+      function fetching() {
+        fetch("/test")
+          .then((response) => response.json())
+          .then((data) => textDelay(data.message))
+          .catch((error) => console.error(error));
       }
-
-      async function onLoad() {
-        fetch(`/main?code=${code}&state=${state}`).then((res) => {
-          res.json().then((data) => {
-            console.log(data.response);
-            const loader = document.querySelector(".progress-bar");
-            loader.style.display = "none";
-            const prompt = document.querySelector(".loading-container");
-            prompt.style.display = "none";
-            populateSlider(data.response.albums_res);
-            textDelay(data.response.text_res);
-          });
-        });
-      }
-
-      function populateSlider(albums) {
-        const footer = document.querySelector(".footer");
-        const logosDiv = document.createElement("div");
-        logosDiv.classList.add("logos");
-
-        const logosSlide = document.createElement("div");
-        logosSlide.classList.add("logos-slide");
-
-        for (const album of albums) {
-          var img = document.createElement("img");
-          img.src = album;
-          logosSlide.appendChild(img);
-        }
-        let copy = logosSlide.cloneNode(true);
-        logosDiv.appendChild(logosSlide);
-        logosDiv.appendChild(copy);
-        footer.appendChild(logosDiv);
-      }
-
-      // const intro = [
-      //   "Sit back, relax, and let the music speak for itself. Your rating is being calculated now.",
-      // ];
 
       async function textDelay(text_array) {
         for (const text of text_array) {
           //Creates the element for the response text and passes them both to the typewriter effect
           const paragraph = document.createElement("p");
-          document.querySelector(".text-container").appendChild(paragraph);
+          paragraph.classList.add("response");
+          document.querySelector(".container").appendChild(paragraph);
 
           //Creates a blinking cursor element, then deletes it before the next cycle
           let cursor = await textTypewriterEffect(paragraph, text);
-          await sleep(4000);
-          paragraph.removeChild(cursor);
+          // await sleep(4000);
+          // paragraph.removeChild(cursor);
         }
       }
 
@@ -162,11 +115,11 @@
             return resolve(cursor);
           } else {
             //Slightly randomizes the speed of the typewriter
-            return setTimeout(
-              () => resolve(textTypewriterEffect(element, text, i + 1)),
-              Math.floor(Math.random() * (30 - 0 + 1) + 0)
-            );
-            // return resolve(textTypewriterEffect(element, text, i + 1));
+            // return setTimeout(
+            //   () => resolve(textTypewriterEffect(element, text, i + 1)),
+            //   Math.floor(Math.random() * (30 - 0 + 1) + 0)
+            // );
+            return resolve(textTypewriterEffect(element, text, i + 1));
           }
         });
       }
