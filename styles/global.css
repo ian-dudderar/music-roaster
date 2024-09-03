@@ -47,6 +47,7 @@ body {
   margin: auto;
   padding: 0 40px;
   text-align: center;
+  animation: fader 3s ease;
 }
 
 .text-container {
