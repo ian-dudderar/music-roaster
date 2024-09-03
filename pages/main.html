@@ -117,17 +117,25 @@
         const logosDiv = document.createElement("div");
         logosDiv.classList.add("logos");
 
-        const logosSlide = document.createElement("div");
-        logosSlide.classList.add("logos-slide");
+        const logosSlide1 = document.createElement("div");
+        logosSlide1.classList.add("logos-slide");
+
+        const logosSlide2 = document.createElement("div");
+        logosSlide2.classList.add("logos-slide");
 
         for (const album of albums) {
           var img = document.createElement("img");
           img.src = album;
-          logosSlide.appendChild(img);
+          logosSlide1.appendChild(img);
+          logosSlide2.appendChild(img);
         }
-        let copy = logosSlide.cloneNode(true);
-        logosDiv.appendChild(logosSlide);
-        logosDiv.appendChild(copy);
+
+        // I tried to do it this way, but it was giving me issues on safari/IOS devices
+        // let copy = logosSlide.cloneNode(true);
+        // logosDiv.appendChild(copy);
+
+        logosDiv.appendChild(logosSlide1);
+        logosDiv.appendChild(logosSlide2);
         footer.appendChild(logosDiv);
       }
 
