@@ -64,9 +64,16 @@ body {
   animation: fader 3s ease;
 }
 
+.intro p {
+  font-size: 1.1rem;
+}
+
+.loading-prompt p {
+  font-size: 1.1rem;
+}
+
 p {
   margin-bottom: 1.5rem;
-  /* font-size: 1.1rem; */
   line-height: 1.4;
 }
 
@@ -195,6 +202,7 @@ footer {
 .cursor {
   animation: blinker 0.5s step-start infinite;
   color: var(--spotify-green);
+  font-weight: bold;
 }
 
 @keyframes blinker {

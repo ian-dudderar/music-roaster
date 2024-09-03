@@ -110,10 +110,10 @@
             loader.style.display = "none";
             const prompt = document.querySelector(".loading-container");
             prompt.style.display = "none";
-            populateSlider(fake_albums);
-            textDelay(fake_res);
-            // populateSlider(data.response.albums_res);
-            // textDelay(data.response.text_res);
+            // populateSlider(fake_albums);
+            // textDelay(fake_res);
+            populateSlider(data.response.albums_res);
+            textDelay(data.response.text_res);
           });
         });
       }
@@ -156,20 +156,29 @@
       // ];
 
       async function textDelay(text_array) {
-        for (const text of text_array) {
+        let i = 1;
+        let useCursor = true;
+        for (let text of text_array) {
+          if (i != text_array.length) {
+            text = text + "..";
+          } else {
+            useCursor = false;
+          }
           //Creates the element for the response text and passes them both to the typewriter effect
           const paragraph = document.createElement("p");
           document.querySelector(".text-container").appendChild(paragraph);
 
           //Creates a blinking cursor element, then deletes it before the next cycle
-          let cursor = await textTypewriterEffect(paragraph, text);
+          let cursor = await textTypewriterEffect(paragraph, text, useCursor);
           await sleep(4000);
-          paragraph.removeChild(cursor);
+          if (useCursor) paragraph.removeChild(cursor);
+          // paragraph.removeChild(cursor);
+          i++;
         }
       }
 
       // Function to simulate typewriter effect
-      function textTypewriterEffect(element, text, i = 0) {
+      function textTypewriterEffect(element, text, useCursor, i = 0) {
         return new Promise((resolve) => {
           element.textContent += text[i];
           element.scrollIntoView();
@@ -178,12 +187,14 @@
             const cursor = document.createElement("span");
             cursor.classList.add("cursor");
             cursor.innerHTML = "|";
-            element.appendChild(cursor);
+            if (useCursor) element.appendChild(cursor);
+            // element.appendChild(cursor);
             return resolve(cursor);
           } else {
             //Slightly randomizes the speed of the typewriter
             return setTimeout(
-              () => resolve(textTypewriterEffect(element, text, i + 1)),
+              () =>
+                resolve(textTypewriterEffect(element, text, useCursor, i + 1)),
               Math.floor(Math.random() * (30 - 0 + 1) + 0)
             );
             // return resolve(textTypewriterEffect(element, text, i + 1));
