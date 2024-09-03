@@ -181,6 +181,7 @@ footer {
 } */
 
 .logos-slide {
+  will-change: transform;
   display: inline-block;
   animation: 15s slide infinite linear;
   margin-top: auto;
