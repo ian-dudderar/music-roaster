@@ -183,8 +183,9 @@ footer {
 .logos-slide {
   will-change: transform;
   display: inline-block;
-  animation: 15s slide infinite linear;
+  animation: 20s slide infinite linear;
   margin-top: auto;
+  padding-left: 100vw;
 }
 
 .logos-slide img {
@@ -193,10 +194,10 @@ footer {
 }
 
 @keyframes slide {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  100% {
     transform: translateX(-100%);
   }
 }

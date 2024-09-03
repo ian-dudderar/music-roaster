@@ -80,13 +80,13 @@
       const code = urlParams.get("code");
       const state = urlParams.get("state");
 
-      // const fake_res = [
-      //   "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
-      //   "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-      //   "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-      //   "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-      //   "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-      // ];
+      const fake_res = [
+        "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
+        "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
+        "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
+        "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
+        "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
+      ];
       // textDelay(res);
       onLoad();
 
@@ -94,14 +94,14 @@
         return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
-      // const fake_albums = [
-      //   "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-      //   "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-      //   "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
-      //   "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-      //   "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-      //   "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
-      // ];
+      const fake_albums = [
+        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
+        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+      ];
 
       async function onLoad() {
         fetch(`/main?code=${code}&state=${state}`).then((res) => {
@@ -110,10 +110,10 @@
             loader.style.display = "none";
             const prompt = document.querySelector(".loading-container");
             prompt.style.display = "none";
-            // populateSlider(fake_albums);
-            // textDelay(fake_res);
-            populateSlider(data.response.albums_res);
-            textDelay(data.response.text_res);
+            populateSlider(fake_albums);
+            textDelay(fake_res);
+            // populateSlider(data.response.albums_res);
+            // textDelay(data.response.text_res);
           });
         });
       }
@@ -145,7 +145,7 @@
         // let copy = logosSlide.cloneNode(true);
         // logosDiv.appendChild(copy);
 
-        logosDiv.appendChild(logosSlide1);
+        // logosDiv.appendChild(logosSlide1);
         logosDiv.appendChild(logosSlide2);
 
         footer.appendChild(logosDiv);
