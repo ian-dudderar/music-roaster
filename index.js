@@ -130,14 +130,18 @@ async function roast_tracks(tracks) {
 //---------End Helper Functions---------
 
 //-----Routes------
-
-app.get("/test", (req, res) => {
-  res.sendFile("pages/test.html", { root: __dirname });
-});
-
 // Index Page
 app.get("/", (req, res) => {
   res.sendFile("pages/index.html", { root: __dirname });
+});
+
+// Error Page
+app.get("/error", (req, res) => {
+  res.sendFile("pages/error.html", { root: __dirname });
+});
+
+app.get("*", (req, res) => {
+  res.redirect("/error");
 });
 
 //Spotify User Auth
