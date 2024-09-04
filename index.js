@@ -103,28 +103,28 @@ async function roast_tracks(tracks) {
 
   var inputString = "";
 
-  for (const track of tracks) {
-    var trackInfo = track.name + " by " + track.artist + ", ";
-    inputString += trackInfo;
-  }
+  // for (const track of tracks) {
+  //   var trackInfo = track.name + " by " + track.artist + ", ";
+  //   inputString += trackInfo;
+  // }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "You are a funny music critic." },
-      {
-        role: "user",
-        content:
-          "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
-          inputString,
-      },
-    ],
-  });
-  llm_response = completion.choices[0].message.content;
-  text_response = llm_response.split("\n\n");
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o-mini",
+  //   messages: [
+  //     { role: "system", content: "You are a funny music critic." },
+  //     {
+  //       role: "user",
+  //       content:
+  //         "Based on the following songs and musical artists, write approximately 2 to 3 paragraphs roasting the user for their music choices. Be sure to acknowledge and poke fun at their most popular genre if they have one, or their lack thereof. The response should be both rude and funny. " +
+  //         inputString,
+  //     },
+  //   ],
+  // });
+  // llm_response = completion.choices[0].message.content;
+  // text_response = llm_response.split("\n\n");
 
-  // return "";
-  return text_response;
+  return "";
+  // return text_response;
 }
 
 //---------End Helper Functions---------
@@ -167,14 +167,19 @@ app.get("/main", async (req, res) => {
 
   // Check to ensure the user has been properly authenticated
   if (state === null) {
-    res.redirect("/" + querystring.stringify({ error: "State mismatch" }));
+    return res.redirect(
+      "/" + querystring.stringify({ error: "State mismatch" })
+    );
   } else if (code === null) {
-    res.redirect("/" + querystring.stringify({ error: "Login failed" }));
+    return res.redirect("/" + querystring.stringify({ error: "Login failed" }));
   }
 
   // Exchange the authorization code for an access token
   // One the access token is received, redirects the user to the user page and passes the token
   const token = await getAccessToken(code);
+  if (!token) {
+    return res.json({ error: "Error getting access token" }, 402);
+  }
   const tracks = await fetchTrackData(token);
   const text_res = await roast_tracks(tracks);
   var albums = [];
@@ -186,8 +191,6 @@ app.get("/main", async (req, res) => {
     albums_res: albums,
     text_res: text_res,
   };
-
-  // console.log(data_response);
 
   res.send({ response: data_response });
 });

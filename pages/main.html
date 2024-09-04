@@ -104,18 +104,24 @@
       ];
 
       async function onLoad() {
-        fetch(`/main?code=${code}&state=${state}`).then((res) => {
-          res.json().then((data) => {
-            const loader = document.querySelector(".progress-bar");
-            loader.style.display = "none";
+        fetch(`/main?code=${code}&state=${state}`)
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            } else {
+              throw new Error("Response is not ok");
+            }
+          })
+          .then((data) => {
             const prompt = document.querySelector(".loading-container");
             prompt.style.display = "none";
-            // populateSlider(fake_albums);
-            // textDelay(fake_res);
             populateSlider(data.response.albums_res);
             textDelay(data.response.text_res);
+          })
+          .catch((error) => {
+            console.error("Error hit: ", error);
+            window.location = "/error";
           });
-        });
       }
 
       // populateSlider(albums);
