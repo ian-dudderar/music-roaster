@@ -135,15 +135,6 @@ app.get("/", (req, res) => {
   res.sendFile("pages/index.html", { root: __dirname });
 });
 
-// Error Page
-app.get("/error", (req, res) => {
-  res.sendFile("pages/error.html", { root: __dirname });
-});
-
-app.get("*", (req, res) => {
-  res.redirect("/error");
-});
-
 //Spotify User Auth
 app.get("/authenticate", (req, res) => {
   var state = randomstring.generate(16);
@@ -163,7 +154,11 @@ app.get("/authenticate", (req, res) => {
 
 // Callback function for spotify authentication
 app.get("/callback", (req, res) => {
-  res.sendFile("pages/main.html", { root: __dirname });
+  if (req.query.error) {
+    res.redirect("/error");
+  } else {
+    res.sendFile("pages/main.html", { root: __dirname });
+  }
 });
 
 app.get("/main", async (req, res) => {
@@ -195,6 +190,15 @@ app.get("/main", async (req, res) => {
   // console.log(data_response);
 
   res.send({ response: data_response });
+});
+
+// Error Page
+app.get("/error", (req, res) => {
+  res.sendFile("pages/error.html", { root: __dirname });
+});
+
+app.get("*", (req, res) => {
+  res.redirect("/error");
 });
 
 //---------End Routes---------
