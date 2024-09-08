@@ -15,145 +15,29 @@
     <!-- This header is my really broken way of adding padding to the top of the page-->
     <div class="header"></div>
     <div class="container">
-      <div class="loading-container">
-        <p id="loading-prompt">
-          Sit back, relax, and let the music speak for itself. Your rating is
-          being calculated now.
+      <div class="prompt-container">
+        <p id="prompt">
+          What would you like to do?
         </p>
-        <div class="progress-bar"></div>
+        <a><button class="button">Roast Me</button></a>
+        <a href="/playlists"><button class="button">Grade My Playlists</button></a>
       </div>
-      <div class="text-container"></div>
     </div>
     <!-- </main> -->
     <footer class="footer">
-      <!-- <div class="logos">
-        <div class="logos-slide">
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
-          />
-        </div>
-        <div class="logos-slide">
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039"
-          />
-          <img
-            src="https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288"
-          />
-        </div>
-      </div> -->
+
     </footer>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
       const state = urlParams.get("state");
 
-      const fake_res = [
-        "Lorem ipsum odor amet, consectetuer adipiscing elit. Suspendisse tortor ac aliquet; mattis ipsum at venenatis? Porttitor rhoncus vestibulum litora fringilla vitae porttitor laoreet. Fames ultricies ac nulla, scelerisque habitant ligula. Erat viverra ornare interdum posuere dis dui. Tortor ac mauris nullam elit pulvinar tempus. Cubilia eu turpis risus per mauris.",
-        "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-        "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-        // "Placerat praesent non proin vulputate tincidunt penatibus duis tristique. Est laoreet justo erat fringilla tristique lacinia quisque suspendisse. Purus eu est duis; quis nostra pharetra natoque fusce. Ultricies commodo sit parturient justo luctus; cursus congue torquent. Nec nullam erat mi rutrum sodales dapibus. Accumsan iaculis arcu habitasse euismod aliquet integer diam nisl. Rutrum augue pulvinar mi ac phasellus vehicula. Lectus donec nisl netus ante pharetra facilisi luctus fermentum inceptos. Dolor ac orci risus vehicula sagittis integer.",
-        // "Sagittis magnis taciti urna viverra litora facilisi. Ullamcorper gravida molestie augue morbi potenti. Sem velit mollis placerat metus feugiat eleifend. Fusce felis purus at urna montes vivamus lobortis morbi. Sed venenatis vel mauris bibendum pretium torquent vel. In malesuada torquent integer, mollis amet scelerisque natoque ullamcorper. Vitae lacinia egestas finibus amet magna nullam venenatis!",
-      ];
-      // textDelay(res);
-      onLoad();
+    
 
       function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
-      const fake_albums = [
-        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
-        "https://i.scdn.co/image/ab67616d0000b2734afc20695127f696ec16f828",
-        "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-        "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
-      ];
-
-      async function onLoad() {
-        fetch(`/main?code=${code}&state=${state}`).then((res) => {
-          res.json().then((data) => {
-            const loader = document.querySelector(".progress-bar");
-            loader.style.display = "none";
-            const prompt = document.querySelector(".loading-container");
-            prompt.style.display = "none";
-            // populateSlider(fake_albums);
-            // textDelay(fake_res);
-            populateSlider(data.response.albums_res);
-            textDelay(data.response.text_res);
-          });
-        });
-      }
-
-      // populateSlider(albums);
-
-      function populateSlider(albums) {
-        const footer = document.querySelector(".footer");
-        const logosDiv = document.createElement("div");
-        logosDiv.classList.add("logos");
-
-        // I tried to do this using Node.copy instead of hard coding 2 different elements
-        // However, this was giving me issues and working incorrectly on IOS Mobile devices
-        const logosSlide1 = document.createElement("div");
-        logosSlide1.classList.add("logos-slide");
-
-        const logosSlide2 = document.createElement("div");
-        logosSlide2.classList.add("logos-slide");
-
-        for (const album of albums) {
-          var img1 = document.createElement("img");
-          img1.src = album;
-          var img2 = document.createElement("img");
-          img2.src = album;
-          logosSlide1.appendChild(img1);
-          logosSlide2.appendChild(img2);
-        }
-
-        // let copy = logosSlide.cloneNode(true);
-        // logosDiv.appendChild(copy);
-
-        // logosDiv.appendChild(logosSlide1);
-        logosDiv.appendChild(logosSlide2);
-
-        footer.appendChild(logosDiv);
-      }
-
-      // const intro = [
-      //   "Sit back, relax, and let the music speak for itself. Your rating is being calculated now.",
-      // ];
 
       async function textDelay(text_array) {
         let i = 1;
