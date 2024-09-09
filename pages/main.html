@@ -1,90 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-    />
-    <title>Rate My Music</title>
-    <link href="global.css" rel="stylesheet" type="text/css" />
-    <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Analyzer</title>
+    <link href="main.css" rel="stylesheet" type="text/css" />
 
-  <body>
-    <!-- This header is my really broken way of adding padding to the top of the page-->
-    <div class="header"></div>
+</head>
+<body>
     <div class="container">
-      <div class="prompt-container">
-        <p id="prompt">
-          What would you like to do?
-        </p>
-        <a><button class="button">Roast Me</button></a>
-        <a href="/playlists"><button class="button">Grade My Playlists</button></a>
-      </div>
+        <h1>Spotify Analyzer</h1>
+        <p>Choose an option to analyze your Spotify data:</p>
+        <div class="button-container">
+            <a href="/roast" class="button button-green">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/>
+                </svg>
+                Roast My Music Library
+            </a>
+            <a href="/select-playlist" class="button button-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"/>
+                    <circle cx="6" cy="18" r="3"/>
+                    <circle cx="18" cy="16" r="3"/>
+                </svg>
+                Rate My Playlist
+            </a>
+        </div>
     </div>
-    <!-- </main> -->
-    <footer class="footer">
-
-    </footer>
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-      const state = urlParams.get("state");
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        const state = urlParams.get("state");
 
-    
+        onLoad();
 
-      function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      }
-
-
-      async function textDelay(text_array) {
-        let i = 1;
-        let useCursor = true;
-        for (let text of text_array) {
-          if (i != text_array.length) {
-            text = text + "..";
-          } else {
-            useCursor = false;
-          }
-          //Creates the element for the response text and passes them both to the typewriter effect
-          const paragraph = document.createElement("p");
-          document.querySelector(".text-container").appendChild(paragraph);
-
-          //Creates a blinking cursor element, then deletes it before the next cycle
-          let cursor = await textTypewriterEffect(paragraph, text, useCursor);
-          await sleep(8000);
-          if (useCursor) paragraph.removeChild(cursor);
-          // paragraph.removeChild(cursor);
-          i++;
+        async function onLoad() {
+            fetch(`/main?code=${code}&state=${state}`).then((res) => {
+            res.json().then((data) => {
+                sessionStorage.setItem("token", data.response)
+            });
+            });
         }
-      }
 
-      // Function to simulate typewriter effect
-      function textTypewriterEffect(element, text, useCursor, i = 0) {
-        return new Promise((resolve) => {
-          element.textContent += text[i];
-          element.scrollIntoView();
-          if (i === text.length - 1) {
-            // Create a blinking cursor element and appends it
-            const cursor = document.createElement("span");
-            cursor.classList.add("cursor");
-            cursor.innerHTML = "|";
-            if (useCursor) element.appendChild(cursor);
-            // element.appendChild(cursor);
-            return resolve(cursor);
-          } else {
-            //Slightly randomizes the speed of the typewriter
-            return setTimeout(
-              () =>
-                resolve(textTypewriterEffect(element, text, useCursor, i + 1)),
-              Math.floor(Math.random() * (30 - 0 + 1) + 0)
-            );
-            // return resolve(textTypewriterEffect(element, text, i + 1));
-          }
-        });
-      }
     </script>
-  </body>
+</body>
 </html>

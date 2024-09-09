@@ -7,82 +7,101 @@
     <title>Grade My Playlist</title>
     <link rel="stylesheet" href="playlists.css" type="text/css">
     <script>
-        const playlists = [
-            { id: 1, name: "Chill Vibes", tracks: 42 },
-            { id: 2, name: "Workout Mix", tracks: 30 },
-            { id: 3, name: "Road Trip Tunes", tracks: 55 },
-            { id: 4, name: "Study Session", tracks: 28 },
-            { id: 5, name: "Party Anthems", tracks: 60 },
-            { id: 6, name: "Acoustic Covers", tracks: 35 },
-        ];
+        var playlists = []
+        async function onLoad() {
+            fetch(`/get-playlists?token=${sessionStorage.getItem('token')}`)
+                .then((res) => res.json())
+                .then((data) => playlists = data.response)
+                .then(() => initializePage())
+                .catch((error) => console.log("hit: ", error))
 
-        const colors = ['#E13300', '#1DB954', '#509BF5', '#F59B23'];
+        }
+        console.log("page loaded")
+        onLoad()
+        // console.log(images)
 
-        let selectedPlaylist = null;
 
-        function createPlaylistItem(playlist) {
-            const playlistItem = document.createElement('button');
-            playlistItem.className = 'playlist-item';
-            playlistItem.dataset.id = playlist.id;
+        //     const playlists = [
+        //         { id: 1, name: "Chill Vibes", tracks: 42 },
+        //         { id: 2, name: "Workout Mix", tracks: 30 },
+        //         { id: 3, name: "Road Trip Tunes", tracks: 55 },
+        //         { id: 4, name: "Study Session", tracks: 28 },
+        //         { id: 5, name: "Party Anthems", tracks: 60 },
+        //         { id: 6, name: "Acoustic Covers", tracks: 35 },
+        //     ];
 
-            const coverHtml = `
-        <div class="playlist-cover">
-            <div class="cover-grid">
-                ${colors.map(color => `<div class="cover-square" style="background-color: ${color};"></div>`).join('')}
+        //     const colors = ['#E13300', '#1DB954', '#509BF5', '#F59B23'];
+
+            let selectedPlaylist = null;
+
+            function createPlaylistItem(playlist) {
+                const playlistItem = document.createElement('button');
+                playlistItem.className = 'playlist-item';
+                playlistItem.dataset.id = playlist.id;
+
+                const coverHtml = `
+            <div class="playlist-cover">
             </div>
-        </div>
-    `;
+        `;
 
-            playlistItem.innerHTML = `
-        ${coverHtml}
-        <div class="playlist-name">${playlist.name}</div>
-        <div class="playlist-tracks">
-            <i data-lucide="music-2"></i>
-            ${playlist.tracks} tracks
-        </div>
-    `;
+        // <img class='cover' src='${playlist.image.url}'
 
-            playlistItem.addEventListener('click', () => selectPlaylist(playlist.id));
 
-            return playlistItem;
-        }
+                playlistItem.innerHTML = `
+            ${coverHtml}
+            <div class="playlist-name">${playlist.name}</div>
+            <div class="playlist-tracks">
+                <i data-lucide="music-2"></i>
+                ${playlist.tracks} tracks
+            </div>
+        `;
 
-        function selectPlaylist(id) {
-            const previousSelected = document.querySelector('.playlist-item.selected');
-            if (previousSelected) {
-                previousSelected.classList.remove('selected');
-                previousSelected.querySelector('.selected-overlay')?.remove();
+                playlistItem.addEventListener('click', () => selectPlaylist(playlist.id));
+
+                return playlistItem;
             }
 
-            const newSelected = document.querySelector(`.playlist-item[data-id="${id}"]`);
-            if (newSelected) {
-                newSelected.classList.add('selected');
-                const overlay = document.createElement('div');
-                overlay.className = 'selected-overlay';
-                overlay.innerHTML = '<i data-lucide="check-circle"></i>';
-                newSelected.querySelector('.playlist-cover').appendChild(overlay);
+            function selectPlaylist(id) {
+                const previousSelected = document.querySelector('.playlist-item.selected');
+                if (previousSelected) {
+                    previousSelected.classList.remove('selected');
+                    previousSelected.querySelector('.selected-overlay')?.remove();
+                }
+
+                const newSelected = document.querySelector(`.playlist-item[data-id="${id}"]`);
+                if (newSelected) {
+                    newSelected.classList.add('selected');
+                    const overlay = document.createElement('div');
+                    overlay.className = 'selected-overlay';
+                    overlay.innerHTML = '<i data-lucide="check-circle"></i>';
+                    newSelected.querySelector('.playlist-cover').appendChild(overlay);
+                }
+
+                selectedPlaylist = id;
+                updateGradeButton();
+                lucide.createIcons();
             }
 
-            selectedPlaylist = id;
-            updateGradeButton();
-            lucide.createIcons();
-        }
+            function updateGradeButton() {
+                const gradeButton = document.getElementById('gradeButton');
+                gradeButton.disabled = !selectedPlaylist;
+            }
 
-        function updateGradeButton() {
-            const gradeButton = document.getElementById('gradeButton');
-            gradeButton.disabled = !selectedPlaylist;
-        }
+            function initializePage() {
+                console.log(playlists)
+                const playlistGrid = document.getElementById('playlistGrid');
+                playlists.forEach(playlist => {
+                    playlistGrid.appendChild(createPlaylistItem(playlist));
+                });
 
-        function initializePage() {
-            const playlistGrid = document.getElementById('playlistGrid');
-            playlists.forEach(playlist => {
-                playlistGrid.appendChild(createPlaylistItem(playlist));
-            });
+                // lucide.createIcons();
+            }
 
-            lucide.createIcons();
-        }
+            function onClick() {
+                console.log(sessionStorage.getItem('token'))
+            }
 
-        document.addEventListener('DOMContentLoaded', initializePage);
+        // document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </head>
 
@@ -95,12 +114,14 @@
         <main>
             <h2>Select a playlist to grade</h2>
             <div class="playlist-grid" id="playlistGrid"></div>
+                <!-- <img src="https://i.scdn.co/image/ab67616d00001e02b07cdbd49eeb3a820646bc5b" alt="$test cover">
+                <div></div> -->
         </main>
         <footer>
             <button id="gradeButton" disabled>Grade Playlist</button>
         </footer>
     </div>
-    <script src="script.js"></script>
+
 </body>
 
 </html>

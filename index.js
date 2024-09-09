@@ -35,7 +35,7 @@ async function getAccessToken(code) {
     myHeaders.append(
       "Authorization",
       `Basic ` +
-        new Buffer.from(client_id + ":" + client_secret).toString("base64")
+      new Buffer.from(client_id + ":" + client_secret).toString("base64")
     );
     const urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "authorization_code");
@@ -87,6 +87,34 @@ function parseTrackData(track_data) {
     tracks.push(track);
   }
   return tracks;
+}
+
+function fetchPlaylists(token) {
+  const url = `https://api.spotify.com/v1/me/playlists?limit=6`;
+  console.log("hit2")
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(parsePlaylists(result));
+      });
+  });
+}
+
+function parsePlaylists(playlists) {
+  var data = [];
+  for (const playlist of playlists.items) {
+    const image = playlist.images[0]
+    const name = playlist.name;
+    const tracks = 25
+    data.push({name: name, image: image, tracks : 45, id: 1})
+  }
+  return data;
 }
 
 async function roast_tracks(tracks) {
@@ -143,17 +171,17 @@ app.get("/", (req, res) => {
 //Spotify User Auth
 app.get("/authenticate", (req, res) => {
   var state = randomstring.generate(16);
-  var scope = "user-top-read";
+  var scope = "user-top-read playlist-read-private";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
-      querystring.stringify({
-        response_type: "code",
-        scope: scope,
-        state: state,
-        show_dialog: true,
-        redirect_uri: `${LOCAL_URL}/callback`,
-        client_id: client_id,
-      })
+    querystring.stringify({
+      response_type: "code",
+      scope: scope,
+      state: state,
+      show_dialog: true,
+      redirect_uri: `${LOCAL_URL}/callback`,
+      client_id: client_id,
+    })
   );
 });
 
@@ -176,22 +204,44 @@ app.get("/main", async (req, res) => {
   // Exchange the authorization code for an access token
   // One the access token is received, redirects the user to the user page and passes the token
   const token = await getAccessToken(code);
-  const tracks = await fetchTrackData(token);
-  const text_res = await roast_tracks(tracks);
-  var albums = [];
-  for (const track of tracks) {
-    albums.push(track.album_image);
-  }
+  // const tracks = await fetchTrackData(token);
+  // const text_res = await roast_tracks(tracks);
+  // var albums = [];
+  // for (const track of tracks) {
+  //   albums.push(track.album_image);
+  // }
 
-  const data_response = {
-    albums_res: albums,
-    text_res: text_res,
-  };
+  // const data_response = {
+  //   albums_res: albums,
+  //   text_res: text_res,
+  // };
 
   // console.log(data_response);
 
-  res.send({ response: data_response });
+  res.send({ response: token});
+  // res.send({ response: data_response });
 });
+
+app.get("/roast", (req, res) => {
+
+  res.sendFile("pages/playlists", { root: __dirname })
+
+})
+
+app.get("/select-playlist", (req, res) => {
+
+  res.sendFile("pages/playlist.html", { root: __dirname });
+})
+
+app.get("/get-playlists", async (req, res) => {
+  console.log("hit")
+
+  const token = req.query.token
+  playlists = await fetchPlaylists(token);
+  console.log(playlists)
+  res.send({response: playlists})
+
+})
 
 //---------End Routes---------
 
