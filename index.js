@@ -106,8 +106,7 @@ function parseTrackData(track_data) {
 }
 
 function getPlaylists(token) {
-  const url = `https://api.spotify.com/v1/me/playlists?limit=6`;
-  console.log("hit2");
+  const url = `https://api.spotify.com/v1/me/playlists`;
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -123,9 +122,10 @@ function getPlaylists(token) {
 }
 
 function parsePlaylists(playlists) {
+  console.log(playlists);
   var data = [];
   for (const playlist of playlists.items) {
-    const image = playlist.images[0];
+    const image = playlist.images ? playlist.images[0] : null;
     const name = playlist.name;
     const id = playlist.id;
     const tracks = playlist.tracks.total;
@@ -145,12 +145,25 @@ async function getPlaylistTracks(token, playlistId) {
     })
       .then((response) => response.json())
       .then((result) => {
-        resolve(result);
+        resolve(result.items);
       });
   });
 }
 
-async function roast_tracks(tracks) {
+function parsePlaylistTracks(tracks) {
+  var trackData = [];
+  for (const track of tracks) {
+    const trackName = track.track.name;
+    const trackArist = track.track.artists[0].name;
+    trackData.push({ name: trackName, artist: trackArist });
+  }
+  return trackData;
+}
+
+async function getLLMResponse(tracks) {
+  var prompt = `You are a funny music critic, who gives 0-5 star reviews on playlists. (0.5 increments are allowed).  Based on the following playlist information, write 2 brief paragraphs giving a review of the playlist. The 3rd and final paragraph should be ONLY the number 0-5 (0.5 increments) to announce the number of stars the playlist has received.
+To help you with your review, consider the following information. The length of the playlist, the variety of the playlist, and the assumed purpose of the playlist. You should use the name of the playlist to help you determine the strength its content. If you do not understand the playlists name, you may disregard it. Because your review is brief, you should be fairly direct and to the point, with maybe a quick joke or two, and some constructive criticism or some acknowledgement of things they did poorly. `;
+
   // console.log("sleeping...");
   // await sleep(2000);
   // console.log("done sleeping");
@@ -240,7 +253,7 @@ app.get("/main", async (req, res) => {
   const token = await getAccessToken(code);
   const profileImg = await getUserProfile(token);
   // const tracks = await getTrackData(token);
-  // const text_res = await roast_tracks(tracks);
+  // const text_res = await getLLMResponse(tracks);
   // var albums = [];
   // for (const track of tracks) {
   //   albums.push(track.album_image);
@@ -279,14 +292,23 @@ app.get("/grade", async (req, res) => {
 });
 
 app.get("/response", async (req, res) => {
-  console.log(req.query.token);
-  console.log(req.query.playlistId);
+  console.log("HIT");
+  // console.log(req.query.token);
+  // console.log(req.query.playlistId);
   const token = req.query.token;
   const playlistId = req.query.playlistId;
   const tracks = await getPlaylistTracks(token, playlistId);
-  console.log("TRACKS: ", tracks);
+  var trackData = parsePlaylistTracks(tracks);
+  for (const track of trackData) {
+    console.log(track.name, " by ", track.artist);
+  }
+  // console.log(trackData);
   res.send({ response: "response" });
 });
+
+// app.get("/test", (req, res) => {
+//   res.redirect("/grade?playlist=123");
+// });
 //---------End Routes---------
 
 app.listen(process.env.PORT || port, () => {

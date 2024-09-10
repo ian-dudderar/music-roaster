@@ -9,21 +9,49 @@
   <body>
     <div class="container">
       <header>
-        <h1>Grade My Playlist</h1>
         <div class="user-avatar"></div>
       </header>
       <main>
-        <h2>Select a playlist to grade</h2>
-        <div class="playlist-grid" id="playlistGrid"></div>
+        <div class="response">
+          <div id="rating-text">This is my test text</div>
+          <div id="star-container">
+            <svg class="star" viewBox="0 0 24 24">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+            <svg class="star" viewBox="0 0 24 24">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+            <svg class="star" viewBox="0 0 24 24">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+            <svg class="star" viewBox="0 0 24 24">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+            <svg class="star" viewBox="0 0 24 24">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+          </div>
+        </div>
       </main>
       <footer>
-        <button id="gradeButton" disabled>Grade Playlist</button>
+        <button id="gradeButton" disabled>Grade Another Playlist</button>
       </footer>
     </div>
 
     <script>
       var playlists = [];
-      async function onLoad() {
+      async function initializePage() {
+        console.log("initializePage");
         const avatar = sessionStorage.getItem("avatar");
         if (avatar) {
           const avatarContainer = document.querySelector(".user-avatar");
@@ -31,81 +59,68 @@
           avatarImg.src = avatar;
           avatarContainer.appendChild(avatarImg);
         }
+        loadStars();
         const token = sessionStorage.getItem("token");
         const playlistId = new URLSearchParams(window.location.search).get(
           "playlist"
         );
 
-        fetch(
-          `/response?token=${sessionStorage.getItem(
-            "token"
-          )}&playlistId=${playlistId}`
-        ).then(() => initializePage());
+        // fetch(
+        //   `/response?token=${sessionStorage.getItem(
+        //     "token"
+        //   )}&playlistId=${playlistId}`
+        // );
       }
 
       let selectedPlaylist = null;
-
-      function createPlaylistItem(playlist) {
-        const playlistItem = document.createElement("button");
-        playlistItem.className = "playlist-item";
-        playlistItem.dataset.id = playlist.id;
-
-        const coverHtml = `
-                <div class="playlist-cover">
-                    <img src=${playlist.image.url} alt="${playlist.name} cover">
-                </div>
-            `;
-
-        playlistItem.innerHTML = `
-                ${coverHtml}
-                <div class="playlist-name">${playlist.name}</div>
-                <div class="playlist-tracks">${playlist.tracks} tracks</div>
-            `;
-
-        playlistItem.addEventListener("click", () =>
-          selectPlaylist(playlist.id)
-        );
-
-        return playlistItem;
-      }
-
-      function selectPlaylist(id) {
-        const previousSelected = document.querySelector(
-          ".playlist-item.selected"
-        );
-        if (previousSelected) {
-          previousSelected.classList.remove("selected");
-          previousSelected.querySelector(".selected-overlay")?.remove();
-        }
-
-        const newSelected = document.querySelector(
-          `.playlist-item[data-id="${id}"]`
-        );
-        if (newSelected) {
-          newSelected.classList.add("selected");
-          const overlay = document.createElement("div");
-          overlay.className = "selected-overlay";
-          overlay.innerHTML = '<div class="checkmark"></div>';
-          newSelected.querySelector(".playlist-cover").appendChild(overlay);
-        }
-
-        selectedPlaylist = id;
-        updateGradeButton();
-      }
 
       function updateGradeButton() {
         const gradeButton = document.getElementById("gradeButton");
         gradeButton.disabled = !selectedPlaylist;
       }
 
-      function initializePage() {
-        // const playlistGrid = document.getElementById("playlistGrid");
-        // playlists.forEach((playlist) => {
-        //   playlistGrid.appendChild(createPlaylistItem(playlist));
-        // });
+      function loadStars() {
+        const starContainer = document.getElementById("star-container");
+        const stars = document.querySelectorAll(".star");
+        let visibleStars = 0;
+
+        function fetchRandomNumber() {
+          // Simulating an API call
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(Math.floor(Math.random() * 5) + 1);
+            }, 1000);
+          });
+        }
+
+        function positionStars(count) {
+          const starWidth = 48;
+          const gap = 8;
+          const totalWidth = count * starWidth + (count - 1) * gap;
+          const startPosition = (starContainer.offsetWidth - totalWidth) / 2;
+
+          for (let i = 0; i < count; i++) {
+            const position = startPosition + i * (starWidth + gap);
+            stars[i].style.left = `${position}px`;
+          }
+        }
+
+        function activateStars(count) {
+          if (visibleStars < count) {
+            positionStars(visibleStars + 1);
+            stars[visibleStars].classList.add("active", "animate");
+            visibleStars++;
+            setTimeout(() => activateStars(count), 1000);
+          }
+        }
+
+        fetchRandomNumber().then((count) => {
+          activateStars(3);
+        });
       }
 
-      document.addEventListener("DOMContentLoaded", onLoad);
+      // document.addEventListener("DOMContentLoaded", loadStars);
+      document.addEventListener("DOMContentLoaded", initializePage);
     </script>
   </body>
 </html>
