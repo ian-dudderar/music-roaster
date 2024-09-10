@@ -1,48 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Spotify Analyzer</title>
     <link href="main.css" rel="stylesheet" type="text/css" />
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Spotify Analyzer</h1>
-        <p>Choose an option to analyze your Spotify data:</p>
-        <div class="button-container">
-            <a href="/roast" class="button button-green">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/>
-                </svg>
-                Roast My Music Library
-            </a>
-            <a href="/select-playlist" class="button button-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18V5l12-2v13"/>
-                    <circle cx="6" cy="18" r="3"/>
-                    <circle cx="18" cy="16" r="3"/>
-                </svg>
-                Rate My Playlist
-            </a>
-        </div>
+      <h1>Spotify Analyzer</h1>
+      <p>Choose an option to analyze your Spotify data:</p>
+      <div class="button-container">
+        <a href="/roast" class="button button-green">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"
+            />
+          </svg>
+          Roast My Music Library
+        </a>
+        <a href="/select-playlist" class="button button-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+          Rate My Playlist
+        </a>
+      </div>
     </div>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        const state = urlParams.get("state");
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      const state = urlParams.get("state");
 
-        onLoad();
+      onLoad();
 
-        async function onLoad() {
-            fetch(`/main?code=${code}&state=${state}`).then((res) => {
-            res.json().then((data) => {
-                sessionStorage.setItem("token", data.response)
-            });
-            });
-        }
-
+      async function onLoad() {
+        fetch(`/main?code=${code}&state=${state}`).then((res) => {
+          res.json().then((data) => {
+            sessionStorage.setItem("token", data.response.token);
+            sessionStorage.setItem("avatar", data.response.profileImg);
+          });
+        });
+      }
     </script>
-</body>
+  </body>
 </html>

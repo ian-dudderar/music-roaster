@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grade My Playlist</title>
-    <link href="test.css" rel="stylesheet" type="text/css" />
+    <link href="response.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div class="container">
@@ -22,14 +22,26 @@
     </div>
 
     <script>
-      const playlists = [
-        { id: 1, name: "Chill Vibes", tracks: 42 },
-        { id: 2, name: "Workout Mix", tracks: 30 },
-        { id: 3, name: "Road Trip Tunes", tracks: 55 },
-        { id: 4, name: "Study Session", tracks: 28 },
-        { id: 5, name: "Party Anthems", tracks: 60 },
-        { id: 6, name: "Acoustic Covers", tracks: 35 },
-      ];
+      var playlists = [];
+      async function onLoad() {
+        const avatar = sessionStorage.getItem("avatar");
+        if (avatar) {
+          const avatarContainer = document.querySelector(".user-avatar");
+          const avatarImg = document.createElement("img");
+          avatarImg.src = avatar;
+          avatarContainer.appendChild(avatarImg);
+        }
+        const token = sessionStorage.getItem("token");
+        const playlistId = new URLSearchParams(window.location.search).get(
+          "playlist"
+        );
+
+        fetch(
+          `/response?token=${sessionStorage.getItem(
+            "token"
+          )}&playlistId=${playlistId}`
+        ).then(() => initializePage());
+      }
 
       let selectedPlaylist = null;
 
@@ -40,7 +52,7 @@
 
         const coverHtml = `
                 <div class="playlist-cover">
-                    <img src="/placeholder.svg?height=150&width=150" alt="${playlist.name} cover">
+                    <img src=${playlist.image.url} alt="${playlist.name} cover">
                 </div>
             `;
 
@@ -87,13 +99,13 @@
       }
 
       function initializePage() {
-        const playlistGrid = document.getElementById("playlistGrid");
-        playlists.forEach((playlist) => {
-          playlistGrid.appendChild(createPlaylistItem(playlist));
-        });
+        // const playlistGrid = document.getElementById("playlistGrid");
+        // playlists.forEach((playlist) => {
+        //   playlistGrid.appendChild(createPlaylistItem(playlist));
+        // });
       }
 
-      document.addEventListener("DOMContentLoaded", initializePage);
+      document.addEventListener("DOMContentLoaded", onLoad);
     </script>
   </body>
 </html>

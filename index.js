@@ -35,7 +35,7 @@ async function getAccessToken(code) {
     myHeaders.append(
       "Authorization",
       `Basic ` +
-      new Buffer.from(client_id + ":" + client_secret).toString("base64")
+        new Buffer.from(client_id + ":" + client_secret).toString("base64")
     );
     const urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "authorization_code");
@@ -56,7 +56,23 @@ async function getAccessToken(code) {
   });
 }
 
-async function fetchTrackData(token) {
+async function getUserProfile(token) {
+  console.log("fetching user profile...");
+  const url = `https://api.spotify.com/v1/me`;
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result.images[0].url);
+      });
+  });
+}
+
+async function getTrackData(token) {
   console.log("fetching");
 
   const url = `${API_URL}tracks?limit=10`;
@@ -89,9 +105,9 @@ function parseTrackData(track_data) {
   return tracks;
 }
 
-function fetchPlaylists(token) {
+function getPlaylists(token) {
   const url = `https://api.spotify.com/v1/me/playlists?limit=6`;
-  console.log("hit2")
+  console.log("hit2");
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -109,12 +125,29 @@ function fetchPlaylists(token) {
 function parsePlaylists(playlists) {
   var data = [];
   for (const playlist of playlists.items) {
-    const image = playlist.images[0]
+    const image = playlist.images[0];
     const name = playlist.name;
-    const tracks = 25
-    data.push({name: name, image: image, tracks : 45, id: 1})
+    const id = playlist.id;
+    const tracks = playlist.tracks.total;
+    data.push({ name: name, image: image, tracks: tracks, id: id });
   }
   return data;
+}
+
+async function getPlaylistTracks(token, playlistId) {
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result);
+      });
+  });
 }
 
 async function roast_tracks(tracks) {
@@ -171,17 +204,18 @@ app.get("/", (req, res) => {
 //Spotify User Auth
 app.get("/authenticate", (req, res) => {
   var state = randomstring.generate(16);
-  var scope = "user-top-read playlist-read-private";
+  var scope =
+    "user-top-read playlist-read-private user-read-private user-read-email";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
-    querystring.stringify({
-      response_type: "code",
-      scope: scope,
-      state: state,
-      show_dialog: true,
-      redirect_uri: `${LOCAL_URL}/callback`,
-      client_id: client_id,
-    })
+      querystring.stringify({
+        response_type: "code",
+        scope: scope,
+        state: state,
+        show_dialog: true,
+        redirect_uri: `${LOCAL_URL}/callback`,
+        client_id: client_id,
+      })
   );
 });
 
@@ -204,7 +238,8 @@ app.get("/main", async (req, res) => {
   // Exchange the authorization code for an access token
   // One the access token is received, redirects the user to the user page and passes the token
   const token = await getAccessToken(code);
-  // const tracks = await fetchTrackData(token);
+  const profileImg = await getUserProfile(token);
+  // const tracks = await getTrackData(token);
   // const text_res = await roast_tracks(tracks);
   // var albums = [];
   // for (const track of tracks) {
@@ -218,31 +253,40 @@ app.get("/main", async (req, res) => {
 
   // console.log(data_response);
 
-  res.send({ response: token});
+  res.send({ response: { token: token, profileImg: profileImg } });
   // res.send({ response: data_response });
 });
 
 app.get("/roast", (req, res) => {
-
-  res.sendFile("pages/playlists", { root: __dirname })
-
-})
+  res.sendFile("pages/playlists", { root: __dirname });
+});
 
 app.get("/select-playlist", (req, res) => {
-
-  res.sendFile("pages/playlist.html", { root: __dirname });
-})
+  res.sendFile("pages/playlists.html", { root: __dirname });
+});
 
 app.get("/get-playlists", async (req, res) => {
-  console.log("hit")
+  console.log("hit");
 
-  const token = req.query.token
-  playlists = await fetchPlaylists(token);
-  console.log(playlists)
-  res.send({response: playlists})
+  const token = req.query.token;
+  playlists = await getPlaylists(token);
+  // console.log(playlists);
+  res.send({ response: playlists });
+});
 
-})
+app.get("/grade", async (req, res) => {
+  res.sendFile("pages/response.html", { root: __dirname });
+});
 
+app.get("/response", async (req, res) => {
+  console.log(req.query.token);
+  console.log(req.query.playlistId);
+  const token = req.query.token;
+  const playlistId = req.query.playlistId;
+  const tracks = await getPlaylistTracks(token, playlistId);
+  console.log("TRACKS: ", tracks);
+  res.send({ response: "response" });
+});
 //---------End Routes---------
 
 app.listen(process.env.PORT || port, () => {
