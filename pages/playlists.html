@@ -74,6 +74,8 @@
 
       function selectPlaylist(playlist) {
         var id = playlist.id;
+        var playlistPhoto = playlist.image.url;
+        sessionStorage.setItem("playlistPhoto", playlistPhoto);
         const previousSelected = document.querySelector(
           ".playlist-item.selected"
         );

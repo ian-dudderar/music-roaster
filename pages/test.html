@@ -9,11 +9,26 @@
   <body>
     <div class="container">
       <header>
+        <h1>Grade My Playlist</h1>
         <div class="user-avatar"></div>
       </header>
       <main>
         <div class="response">
-          <div id="rating-text">This is my test text</div>
+          <div class="playlist-photo">
+            <img id="image" alt="playlist cover" />
+          </div>
+          <div class="rating-text">
+            Hac feugiat cubilia curae aliquam vehicula diam. Primis nec enim
+            commodo sapien sagittis fermentum magna. Fermentum vulputate velit
+            turpis pharetra cras euismod. Eget metus pharetra cursus pretium
+            duis venenatis. Senectus vel hendrerit felis, himenaeos mollis
+            finibus. Dignissim porttitor ridiculus ligula tellus ante morbi id
+            elementum primis. Dolor proin mi hendrerit ultricies in felis.
+            Feugiat cras odio tristique; rutrum taciti parturient quis hac.
+            Viverra auctor rhoncus metus; imperdiet diam dui taciti? Lacus
+            phasellus pellentesque tempor scelerisque vestibulum nascetur
+            tincidunt?
+          </div>
           <div id="star-container">
             <svg class="star" viewBox="0 0 24 24">
               <path
@@ -44,13 +59,15 @@
         </div>
       </main>
       <footer>
-        <button id="gradeButton" disabled>Grade Another Playlist</button>
+        <button id="gradeButton" disabled>Try again?</button>
       </footer>
     </div>
 
     <script>
       var playlists = [];
       async function initializePage() {
+        document.getElementById("image").src =
+          sessionStorage.getItem("playlistPhoto");
         loadStars();
       }
 
@@ -84,7 +101,7 @@
             // positionStars(visibleStars + 1);
             stars[visibleStars].classList.add("active", "animate");
             visibleStars++;
-            setTimeout(() => activateStars(count), 1000);
+            setTimeout(() => activateStars(count), 500);
           }
         }
 

@@ -122,7 +122,6 @@ function getPlaylists(token) {
 }
 
 function parsePlaylists(playlists) {
-  console.log(playlists);
   var data = [];
   for (const playlist of playlists.items) {
     const image = playlist.images ? playlist.images[0] : null;
@@ -136,6 +135,7 @@ function parsePlaylists(playlists) {
 
 async function getPlaylistTracks(token, playlistId) {
   const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+  console.log("getting playlist tracks");
 
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -279,16 +279,13 @@ app.get("/select-playlist", (req, res) => {
 });
 
 app.get("/get-playlists", async (req, res) => {
-  console.log("hit");
-
   const token = req.query.token;
   playlists = await getPlaylists(token);
-  // console.log(playlists);
   res.send({ response: playlists });
 });
 
 app.get("/grade", async (req, res) => {
-  res.sendFile("pages/response.html", { root: __dirname });
+  res.sendFile("pages/test.html", { root: __dirname });
 });
 
 app.get("/response", async (req, res) => {
@@ -299,10 +296,7 @@ app.get("/response", async (req, res) => {
   const playlistId = req.query.playlistId;
   const tracks = await getPlaylistTracks(token, playlistId);
   var trackData = parsePlaylistTracks(tracks);
-  for (const track of trackData) {
-    console.log(track.name, " by ", track.artist);
-  }
-  // console.log(trackData);
+
   res.send({ response: "response" });
 });
 
