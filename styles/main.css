@@ -47,12 +47,11 @@ p {
 
 .button-container a {
   width: 100%;
-  display: block;
 }
 
 .button {
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 0;
   border: none;
   border-radius: 9999px;
   font-weight: 600;
