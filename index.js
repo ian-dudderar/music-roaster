@@ -56,7 +56,23 @@ async function getAccessToken(code) {
   });
 }
 
-async function fetchTrackData(token) {
+async function getUserProfile(token) {
+  console.log("fetching user profile...");
+  const url = `https://api.spotify.com/v1/me`;
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result.images[0].url);
+      });
+  });
+}
+
+async function getTrackData(token) {
   console.log("fetching");
 
   const url = `${API_URL}tracks?limit=10`;
@@ -89,7 +105,65 @@ function parseTrackData(track_data) {
   return tracks;
 }
 
-async function roast_tracks(tracks) {
+function getPlaylists(token) {
+  const url = `https://api.spotify.com/v1/me/playlists`;
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(parsePlaylists(result));
+      });
+  });
+}
+
+function parsePlaylists(playlists) {
+  var data = [];
+  for (const playlist of playlists.items) {
+    const image = playlist.images ? playlist.images[0] : null;
+    const name = playlist.name;
+    const id = playlist.id;
+    const tracks = playlist.tracks.total;
+    data.push({ name: name, image: image, tracks: tracks, id: id });
+  }
+  return data;
+}
+
+async function getPlaylistTracks(token, playlistId) {
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+  console.log("getting playlist tracks");
+
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result.items);
+      });
+  });
+}
+
+function parsePlaylistTracks(tracks) {
+  var trackData = [];
+  for (const track of tracks) {
+    const trackName = track.track.name;
+    const trackArist = track.track.artists[0].name;
+    trackData.push({ name: trackName, artist: trackArist });
+  }
+  return trackData;
+}
+
+async function getLLMResponse(tracks) {
+  var prompt = `You are a funny music critic, who gives 0-5 star reviews on playlists. (0.5 increments are allowed).  Based on the following playlist information, write 2 brief paragraphs giving a review of the playlist. The 3rd and final paragraph should be ONLY the number 0-5 (0.5 increments) to announce the number of stars the playlist has received.
+To help you with your review, consider the following information. The length of the playlist, the variety of the playlist, and the assumed purpose of the playlist. You should use the name of the playlist to help you determine the strength its content. If you do not understand the playlists name, you may disregard it. Because your review is brief, you should be fairly direct and to the point, with maybe a quick joke or two, and some constructive criticism or some acknowledgement of things they did poorly. `;
+
   // console.log("sleeping...");
   // await sleep(2000);
   // console.log("done sleeping");
@@ -138,7 +212,8 @@ app.get("/", (req, res) => {
 //Spotify User Auth
 app.get("/authenticate", (req, res) => {
   var state = randomstring.generate(16);
-  var scope = "user-top-read";
+  var scope =
+    "user-top-read playlist-read-private user-read-private user-read-email";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -177,22 +252,23 @@ app.get("/main", async (req, res) => {
   // Exchange the authorization code for an access token
   // One the access token is received, redirects the user to the user page and passes the token
   const token = await getAccessToken(code);
-  if (!token) {
-    return res.json({ error: "Error getting access token" }, 402);
-  }
-  const tracks = await fetchTrackData(token);
-  const text_res = await roast_tracks(tracks);
-  var albums = [];
-  for (const track of tracks) {
-    albums.push(track.album_image);
-  }
+  const profileImg = await getUserProfile(token);
+  // const tracks = await getTrackData(token);
+  // const text_res = await getLLMResponse(tracks);
+  // var albums = [];
+  // for (const track of tracks) {
+  //   albums.push(track.album_image);
+  // }
 
-  const data_response = {
-    albums_res: albums,
-    text_res: text_res,
-  };
+  // const data_response = {
+  //   albums_res: albums,
+  //   text_res: text_res,
+  // };
 
-  res.send({ response: data_response });
+  // console.log(data_response);
+
+  res.send({ response: { token: token, profileImg: profileImg } });
+  // res.send({ response: data_response });
 });
 
 // Error Page
@@ -204,6 +280,39 @@ app.get("*", (req, res) => {
   res.redirect("/error");
 });
 
+app.get("/roast", (req, res) => {
+  res.sendFile("pages/playlists", { root: __dirname });
+});
+
+app.get("/select-playlist", (req, res) => {
+  res.sendFile("pages/playlists.html", { root: __dirname });
+});
+
+app.get("/get-playlists", async (req, res) => {
+  const token = req.query.token;
+  playlists = await getPlaylists(token);
+  res.send({ response: playlists });
+});
+
+app.get("/grade", async (req, res) => {
+  res.sendFile("pages/test.html", { root: __dirname });
+});
+
+app.get("/response", async (req, res) => {
+  console.log("HIT");
+  // console.log(req.query.token);
+  // console.log(req.query.playlistId);
+  const token = req.query.token;
+  const playlistId = req.query.playlistId;
+  const tracks = await getPlaylistTracks(token, playlistId);
+  var trackData = parsePlaylistTracks(tracks);
+
+  res.send({ response: "response" });
+});
+
+// app.get("/test", (req, res) => {
+//   res.redirect("/grade?playlist=123");
+// });
 //---------End Routes---------
 
 app.listen(process.env.PORT || port, () => {

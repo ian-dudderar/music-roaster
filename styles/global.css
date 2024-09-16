@@ -50,6 +50,16 @@ body {
   animation: fader 3s ease;
 }
 
+.prompt-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 0 40px;
+  text-align: center;
+  /* width: 100vw; */
+  align-items: center;
+}
+
 .text-container {
   padding: 20px 20px;
   text-align: center;
@@ -99,6 +109,29 @@ p {
 }
 
 .enter-button:hover {
+  background-color: #1ed760;
+  transform: scale(1.05);
+}
+
+.button {
+  background-color: var(--spotify-green);
+  color: var(--spotify-black);
+  border: none;
+  border-radius: 500px;
+  padding: 16px 48px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  /* margin: auto; */
+  margin-bottom: 10px;
+  /* white-space: nowrap; */
+  text-align: center;
+  /* width: 100px; */
+}
+
+.button:hover {
   background-color: #1ed760;
   transform: scale(1.05);
 }
