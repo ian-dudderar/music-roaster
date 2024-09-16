@@ -40,6 +40,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  align-items: center;
 }
 .loading-container {
   display: flex;
@@ -286,8 +287,8 @@ header {
 
 .imagecontainer {
   position: relative;
-  height: 320px;
-  width: 320px;
+  height: 200px;
+  width: 200px;
 }
 
 .imagecontainer img {
@@ -348,4 +349,14 @@ header {
 
 #gradeButton:not(:disabled):hover {
   background-color: #1ed760;
+}
+
+.response-container {
+  display: none;
+  flex-direction: column;
+  padding: 0 10px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
