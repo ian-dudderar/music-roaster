@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Grade My Playlist</title>
+    <title>Rate My Music</title>
     <link href="test.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div class="container">
       <header>
+        <!-- make dynamic -->
         <h1>Grade My Playlist</h1>
         <div class="user-avatar"></div>
       </header>
@@ -18,16 +19,7 @@
             <img id="image" alt="playlist cover" />
           </div>
           <div class="rating-text">
-            Hac feugiat cubilia curae aliquam vehicula diam. Primis nec enim
-            commodo sapien sagittis fermentum magna. Fermentum vulputate velit
-            turpis pharetra cras euismod. Eget metus pharetra cursus pretium
-            duis venenatis. Senectus vel hendrerit felis, himenaeos mollis
-            finibus. Dignissim porttitor ridiculus ligula tellus ante morbi id
-            elementum primis. Dolor proin mi hendrerit ultricies in felis.
-            Feugiat cras odio tristique; rutrum taciti parturient quis hac.
-            Viverra auctor rhoncus metus; imperdiet diam dui taciti? Lacus
-            phasellus pellentesque tempor scelerisque vestibulum nascetur
-            tincidunt?
+            
           </div>
           <div id="star-container">
             <svg class="star" viewBox="0 0 24 24">
@@ -63,55 +55,6 @@
       </footer>
     </div>
 
-    <script>
-      var playlists = [];
-      async function initializePage() {
-        document.getElementById("image").src =
-          sessionStorage.getItem("playlistPhoto");
-        loadStars();
-      }
-
-      function loadStars() {
-        const starContainer = document.getElementById("star-container");
-        const stars = document.querySelectorAll(".star");
-        let visibleStars = 0;
-
-        function fetchRandomNumber() {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(Math.floor(Math.random() * 5) + 1);
-            }, 1000);
-          });
-        }
-
-        function positionStars(count) {
-          const starWidth = 48;
-          const gap = 8;
-          const totalWidth = count * starWidth + (count - 1) * gap;
-          const startPosition = (starContainer.offsetWidth - totalWidth) / 2;
-
-          for (let i = 0; i < count; i++) {
-            // const position = startPosition + i * (starWidth + gap);
-            // stars[i].style.left = `${position}px`;
-          }
-        }
-
-        function activateStars(count) {
-          if (visibleStars < count) {
-            // positionStars(visibleStars + 1);
-            stars[visibleStars].classList.add("active", "animate");
-            visibleStars++;
-            setTimeout(() => activateStars(count), 500);
-          }
-        }
-
-        fetchRandomNumber().then((count) => {
-          activateStars(5);
-        });
-      }
-
-      // document.addEventListener("DOMContentLoaded", loadStars);
-      document.addEventListener("DOMContentLoaded", initializePage);
-    </script>
+    <script src="/response.js"></script>
   </body>
 </html>
