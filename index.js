@@ -21,6 +21,7 @@ const openai = new OpenAI({
 
 // Give express access to the styles folder
 app.use(express.static(path.join(__dirname, "/styles")));
+app.use(express.static(path.join(__dirname, "/scripts")));
 
 //-----Helper Functions------
 
@@ -235,6 +236,7 @@ app.get("/authenticate", (req, res) => {
 app.get("/callback", (req, res) => {
   // console.log(req.query.code);
   if (req.query.error) {
+    console.log("ERROR")
     res.redirect("/error");
   } else {
     // res.redirect("/main");
@@ -297,7 +299,7 @@ app.get("/get-playlists", async (req, res) => {
 });
 
 app.get("/grade", async (req, res) => {
-  res.sendFile("pages/test.html", { root: __dirname });
+  res.sendFile("pages/response.html", { root: __dirname });
 });
 
 app.get("/response", async (req, res) => {
@@ -337,13 +339,13 @@ app.get("/response2", async (req, res) => {
 });
 
 // Error Page
-app.get("/error", (req, res) => {
-  res.sendFile("pages/error.html", { root: __dirname });
-});
+// app.get("/error", (req, res) => {
+//   res.sendFile("pages/error.html", { root: __dirname });
+// });
 
-app.get("*", (req, res) => {
-  res.redirect("/error");
-});
+// app.get("*", (req, res) => {
+//   res.redirect("/error");
+// });
 
 // app.get("/test", (req, res) => {
 //   res.redirect("/grade?playlist=123");
