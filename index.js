@@ -58,6 +58,7 @@ async function getAccessToken(code) {
 
 async function getUserProfile(token) {
   console.log("fetching user profile...");
+  console.log("TOKEN: " + token);
   const url = `https://api.spotify.com/v1/me`;
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -74,6 +75,7 @@ async function getUserProfile(token) {
 
 async function getTrackData(token) {
   console.log("fetching");
+  console.log(token);
 
   const url = `${API_URL}tracks?limit=10`;
   return new Promise((resolve, reject) => {
@@ -86,6 +88,7 @@ async function getTrackData(token) {
       .then((response) => response.json())
       .then((result) => {
         resolve(parseTrackData(result.items));
+        // console.log(result);
       });
   });
 }
@@ -93,6 +96,7 @@ async function getTrackData(token) {
 function parseTrackData(track_data) {
   console.log("parsing...");
   var tracks = [];
+  // console.log(track_data);
   for (const data of track_data) {
     var track = {
       name: data.name,
@@ -229,30 +233,34 @@ app.get("/authenticate", (req, res) => {
 
 // Callback function for spotify authentication
 app.get("/callback", (req, res) => {
+  // console.log(req.query.code);
   if (req.query.error) {
     res.redirect("/error");
   } else {
+    // res.redirect("/main");
     res.sendFile("pages/main.html", { root: __dirname });
   }
 });
 
 app.get("/main", async (req, res) => {
+  // console.log(req.query);
   var code = req.query.code || null;
   var state = req.query.state || null;
 
-  // Check to ensure the user has been properly authenticated
-  if (state === null) {
-    return res.redirect(
-      "/" + querystring.stringify({ error: "State mismatch" })
-    );
-  } else if (code === null) {
-    return res.redirect("/" + querystring.stringify({ error: "Login failed" }));
-  }
+  // // Check to ensure the user has been properly authenticated
+  // if (state === null) {
+  //   return res.redirect(
+  //     "/" + querystring.stringify({ error: "State mismatch" })
+  //   );
+  // } else if (code === null) {
+  //   return res.redirect("/" + querystring.stringify({ error: "Login failed" }));
+  // }
 
   // Exchange the authorization code for an access token
   // One the access token is received, redirects the user to the user page and passes the token
-  const token = await getAccessToken(code);
+  token = await getAccessToken(code);
   const profileImg = await getUserProfile(token);
+
   // const tracks = await getTrackData(token);
   // const text_res = await getLLMResponse(tracks);
   // var albums = [];
@@ -267,21 +275,15 @@ app.get("/main", async (req, res) => {
 
   // console.log(data_response);
 
+  // var token = "";
+  // var profileImg = "";
+  // console.log("returning response");
   res.send({ response: { token: token, profileImg: profileImg } });
   // res.send({ response: data_response });
 });
 
-// Error Page
-app.get("/error", (req, res) => {
-  res.sendFile("pages/error.html", { root: __dirname });
-});
-
-app.get("*", (req, res) => {
-  res.redirect("/error");
-});
-
 app.get("/roast", (req, res) => {
-  res.sendFile("pages/playlists", { root: __dirname });
+  res.sendFile("pages/roaster.html", { root: __dirname });
 });
 
 app.get("/select-playlist", (req, res) => {
@@ -308,6 +310,39 @@ app.get("/response", async (req, res) => {
   var trackData = parsePlaylistTracks(tracks);
 
   res.send({ response: "response" });
+});
+
+app.get("/response2", async (req, res) => {
+  const token = req.query.token;
+
+  console.log("HIT");
+  // const images = [
+  //   "https://mdn.github.io/learning-area/html/multimedia-and-embedding/tasks/images/images/blueberries.jpg",
+  //   "https://www.adobe.com/creativecloud/photography/discover/media_131179edca5f92db203e2b78cb8a308605afbc958.png?width=2000&format=webply&optimize=medium",
+  // ];
+
+  const tracks = await getTrackData(token);
+
+  let trackImages = [];
+  for (const track of tracks) {
+    trackImages.push(track.album_image);
+  }
+  console.log(tracks);
+  // const text_res = await getLLMResponse(tracks);
+
+  await sleep(7000);
+  console.log("responding");
+
+  res.send({ response: trackImages });
+});
+
+// Error Page
+app.get("/error", (req, res) => {
+  res.sendFile("pages/error.html", { root: __dirname });
+});
+
+app.get("*", (req, res) => {
+  res.redirect("/error");
 });
 
 // app.get("/test", (req, res) => {
