@@ -236,7 +236,7 @@ app.get("/authenticate", (req, res) => {
 app.get("/callback", (req, res) => {
   // console.log(req.query.code);
   if (req.query.error) {
-    console.log("ERROR")
+    console.log("ERROR");
     res.redirect("/error");
   } else {
     // res.redirect("/main");
@@ -284,8 +284,12 @@ app.get("/main", async (req, res) => {
   // res.send({ response: data_response });
 });
 
+// app.get("/roast", (req, res) => {
+//   res.sendFile("pages/roaster.html", { root: __dirname });
+// });
+
 app.get("/roast", (req, res) => {
-  res.sendFile("pages/roaster.html", { root: __dirname });
+  res.sendFile("pages/test.html", { root: __dirname });
 });
 
 app.get("/select-playlist", (req, res) => {

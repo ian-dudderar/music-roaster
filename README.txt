@@ -16,6 +16,10 @@ in the package.json add a "start" script to run the command "nodemon index.js", 
 
 create pages folder, and inside of pages create index.html file
 
+If you want to return an index file, ie, res.sendFile("pages/index.html", { root: __dirname }) on backend
+
+
+
 copied bootstrap example into index.html
 
 

@@ -20,7 +20,7 @@ async function onLoad() {
 let selectedPlaylist = null;
 
 function onSubmit() {
-  console.log("submitting");
+  sessionStorage.setItem("grade", true);
   window.location.href = `/grade?playlist=${selectedPlaylist.id}`;
 }
 
@@ -50,17 +50,13 @@ function selectPlaylist(playlist) {
   var id = playlist.id;
   var playlistPhoto = playlist.image.url;
   sessionStorage.setItem("playlistPhoto", playlistPhoto);
-  const previousSelected = document.querySelector(
-    ".playlist-item.selected"
-  );
+  const previousSelected = document.querySelector(".playlist-item.selected");
   if (previousSelected) {
     previousSelected.classList.remove("selected");
     previousSelected.querySelector(".selected-overlay")?.remove();
   }
 
-  const newSelected = document.querySelector(
-    `.playlist-item[data-id="${id}"]`
-  );
+  const newSelected = document.querySelector(`.playlist-item[data-id="${id}"]`);
   if (newSelected) {
     newSelected.classList.add("selected");
     const overlay = document.createElement("div");
