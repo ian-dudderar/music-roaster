@@ -234,12 +234,10 @@ app.get("/authenticate", (req, res) => {
 
 // Callback function for spotify authentication
 app.get("/callback", (req, res) => {
-  // console.log(req.query.code);
   if (req.query.error) {
     console.log("ERROR");
     res.redirect("/error");
   } else {
-    // res.redirect("/main");
     res.sendFile("pages/main.html", { root: __dirname });
   }
 });
@@ -303,7 +301,7 @@ app.get("/get-playlists", async (req, res) => {
 });
 
 app.get("/grade", async (req, res) => {
-  res.sendFile("pages/response.html", { root: __dirname });
+  res.sendFile("pages/test.html", { root: __dirname });
 });
 
 app.get("/response", async (req, res) => {
@@ -333,13 +331,15 @@ app.get("/response2", async (req, res) => {
   for (const track of tracks) {
     trackImages.push(track.album_image);
   }
-  console.log(tracks);
   // const text_res = await getLLMResponse(tracks);
 
-  await sleep(7000);
+  await sleep(3000);
   console.log("responding");
+  const fakeres = [
+    "Hac feugiat cubilia curae aliquam vehicula diam. Primis nec enimcommodo sapien sagittis fermentum magna. Fermentum vulputate velitturpis pharetra cras euismod. Eget metus pharetra cursus pretium duis venenatis. Senectus vel hendrerit felis, himenaeos mollis finibus. Dignissim porttitor ridiculus ligula tellus ante morbi id elementum primis. Dolor proin mi hendrerit ultricies in felis. Feugiat cras odio tristique; rutrum taciti parturient quis hac. Viverra auctor rhoncus metus; imperdiet diam dui taciti? Lacus phasellus pellentesque tempor scelerisque vestibulum nascetur tincidunt?",
+  ];
 
-  res.send({ response: trackImages });
+  res.send({ images: trackImages, textRes: fakeres });
 });
 
 // Error Page
