@@ -10,6 +10,19 @@ const fake_prompts = [
   "Running your tunes through my vibe-o-meter... not looking good...",
 ];
 
+const fake_images = [
+  "https://i.scdn.co/image/ab67616d0000b273c9fec49c8930fb10e4756dfe",
+  "https://i.scdn.co/image/ab67616d0000b273f239a45be61917fd61898241",
+  "https://i.scdn.co/image/ab67616d0000b273583ce664168dca88fdc1c4c1",
+  "https://i.scdn.co/image/ab67616d0000b273310909bc20d587f8792a7039",
+  "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
+  "https://i.scdn.co/image/ab67616d0000b27306596cef717cbdce8b874778",
+  "https://i.scdn.co/image/ab67616d0000b2736b405be80472a13cd4b2e80b",
+  "https://i.scdn.co/image/ab67616d0000b2732a1073dd2629bffca89c2288",
+  "https://i.scdn.co/image/ab67616d0000b273904234ebed6cf856b54f9861",
+  "https://i.scdn.co/image/ab67616d0000b273a8bcf8fac8520ac2cbf72ea7",
+];
+
 // Used to determine which option the user selected
 const grade = sessionStorage.getItem("grade");
 const avatar = sessionStorage.getItem("avatar");
@@ -33,12 +46,43 @@ async function initializePage() {
     ? (header.textContent = "Rate my Playlist")
     : (header.textContent = "Roast my Spotify");
 
+  // loading();
+
   getContent(grade);
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  const button = document.getElementById("try-again");
-  button.classList.add("fade");
-  button.disabled = false;
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  // const button = document.getElementById("try-again");
+  // button.classList.add("fade");
+  // button.disabled = false;
+}
+
+async function loading() {
+  loadingImages(fake_images);
+}
+
+async function loadingImages(imgs) {
+  const container = document.querySelector(".loading-container");
+  const imageContainer = document.createElement("div");
+  imageContainer.classList.add("image-container");
+  container.prepend(imageContainer);
+  for (const img of imgs) {
+    const image = document.createElement("img");
+    image.src = img;
+    imageContainer.appendChild(image);
+  }
+  const images = document.querySelectorAll(".image-container img");
+  let count = 0;
+  while (true) {
+    if (count === images.length) {
+      count = 0;
+    }
+    images[count].classList.add("entering");
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    images[count].classList.remove("entering");
+    images[count].classList.add("exiting");
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    count++;
+  }
 }
 
 async function getContent(grade) {
@@ -60,7 +104,6 @@ async function thinking() {
 }
 
 async function hydratePage(data, grade) {
-  console.log("HYRATE PAGE GRADE: ", grade);
   const loader = document.querySelector(".loading-container");
   loader.classList.add("exiting");
   await sleep(1000);
@@ -68,14 +111,30 @@ async function hydratePage(data, grade) {
   const { images, textRes } = data;
   const div = document.querySelector(".response");
   div.style.display = "flex";
-  textDelay(textRes);
+  const footer = document.getElementById("footer");
+  footer.style.opacity = "100%";
+
+  // textDelay(textRes);
+  textDisplay(textRes);
   displayImages(images);
+  await sleep(2000);
+  displayButton();
   if (grade === "true") {
     console.log(typeof grade);
     console.log("hydrating grade");
     generateStars(div);
   } else {
     console.log("Not grade");
+  }
+}
+
+function textDisplay(text_array) {
+  const response = document.querySelector(".response");
+  // paragraph.textContent = textRes;
+  for (let text of text_array) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = text;
+    document.querySelector(".response").appendChild(paragraph);
   }
 }
 
@@ -102,6 +161,32 @@ async function displayImages(imgs) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     count++;
   }
+}
+
+function generateStars(div) {
+  const starContainer = document.getElementById("star-container");
+  starContainer.style.display = "flex";
+  const stars = document.querySelectorAll(".star");
+  let visibleStars = 0;
+
+  function activateStars(count) {
+    if (visibleStars < count) {
+      // positionStars(visibleStars + 1);
+      stars[visibleStars].classList.add("active", "animate");
+      visibleStars++;
+      setTimeout(() => activateStars(count), 500);
+    }
+  }
+
+  activateStars(2);
+}
+
+function displayButton() {
+  const footer = document.getElementById("footer");
+  const button = document.getElementById("try-again");
+  footer.style.opacity = "100%";
+  button.classList.add("fade");
+  button.disabled = false;
 }
 
 async function textDelay(text_array) {
@@ -150,24 +235,6 @@ function textTypewriterEffect(element, text, useCursor, i = 0) {
       // );
     }
   });
-}
-
-function generateStars(div) {
-  const starContainer = document.getElementById("star-container");
-  starContainer.style.display = "flex";
-  const stars = document.querySelectorAll(".star");
-  let visibleStars = 0;
-
-  function activateStars(count) {
-    if (visibleStars < count) {
-      // positionStars(visibleStars + 1);
-      stars[visibleStars].classList.add("active", "animate");
-      visibleStars++;
-      setTimeout(() => activateStars(count), 500);
-    }
-  }
-
-  activateStars(2);
 }
 
 function onSubmit() {

@@ -330,6 +330,7 @@ app.get("/response2", async (req, res) => {
   for (const track of tracks) {
     trackImages.push(track.album_image);
   }
+  console.log(trackImages);
 
   // const text_res = await getLLMResponse(tracks);
 
