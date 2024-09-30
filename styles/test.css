@@ -64,6 +64,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  display: none;
 }
 
 .container {
@@ -157,6 +158,11 @@ button:not(:disabled):hover {
   }
 }
 
+.playlist-photo {
+  max-width: 200px;
+  max-height: 200px;
+}
+
 .cursor {
   animation: blinker 0.5s step-start infinite;
   color: var(--spotify-green);
@@ -218,5 +224,45 @@ button:not(:disabled):hover {
   }
   100% {
     opacity: 100%;
+  }
+}
+
+#star-container {
+  /* display: flex; */
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  width: 280px;
+  margin: 0 auto;
+  display: none;
+}
+
+.star {
+  width: 48px;
+  height: 48px;
+  fill: #ccc;
+  transform: scale(0);
+  transition: transform 0.5s ease-out;
+  /* position: absolute; */
+}
+
+.star.active {
+  fill: #ffd700;
+}
+
+.star.animate {
+  animation: popIn 0.5s ease-out forwards;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
   }
 }

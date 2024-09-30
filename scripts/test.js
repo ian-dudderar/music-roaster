@@ -10,9 +10,11 @@ const fake_prompts = [
   "Running your tunes through my vibe-o-meter... not looking good...",
 ];
 
-const avatar = sessionStorage.getItem("avatar");
+// Used to determine which option the user selected
 const grade = sessionStorage.getItem("grade");
+const avatar = sessionStorage.getItem("avatar");
 const token = sessionStorage.getItem("token");
+const playlistId = sessionStorage.getItem("playlistId");
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,20 +33,22 @@ async function initializePage() {
     ? (header.textContent = "Rate my Playlist")
     : (header.textContent = "Roast my Spotify");
 
-  getContent();
+  getContent(grade);
 
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
-  // const button = document.getElementById("try-again");
-  // button.classList.add("fade");
-  // button.disabled = false;
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const button = document.getElementById("try-again");
+  button.classList.add("fade");
+  button.disabled = false;
 }
 
-async function getContent() {
-  fetch(`response2?token=${token}`).then((res) => {
+async function getContent(grade) {
+  // let playlistId = null;
+  console.log("GET CONTENT GRADE: ", grade);
+  fetch(
+    `response2?token=${token}&grade=${grade}&playlistId=${playlistId}`
+  ).then((res) => {
     res.json().then((data) => {
-      // const loader = document.querySelector(".loading-container");
-      // loader.style.display = "none";
-      hydratePage(data);
+      hydratePage(data, grade);
     });
   });
 }
@@ -55,15 +59,24 @@ async function thinking() {
   textDelay(prompts);
 }
 
-function hydratePage(data) {
+async function hydratePage(data, grade) {
+  console.log("HYRATE PAGE GRADE: ", grade);
+  const loader = document.querySelector(".loading-container");
+  loader.classList.add("exiting");
+  await sleep(1000);
+  loader.style.display = "none";
   const { images, textRes } = data;
-  // const main = document.querySelector("main");
-  // const div = document.createElement("div");
-  // div.classList.add("response");
-  // main.appendChild(div);
-  // textDelay(textRes);
-  thinking();
+  const div = document.querySelector(".response");
+  div.style.display = "flex";
+  textDelay(textRes);
   displayImages(images);
+  if (grade === "true") {
+    console.log(typeof grade);
+    console.log("hydrating grade");
+    generateStars(div);
+  } else {
+    console.log("Not grade");
+  }
 }
 
 async function displayImages(imgs) {
@@ -137,6 +150,24 @@ function textTypewriterEffect(element, text, useCursor, i = 0) {
       // );
     }
   });
+}
+
+function generateStars(div) {
+  const starContainer = document.getElementById("star-container");
+  starContainer.style.display = "flex";
+  const stars = document.querySelectorAll(".star");
+  let visibleStars = 0;
+
+  function activateStars(count) {
+    if (visibleStars < count) {
+      // positionStars(visibleStars + 1);
+      stars[visibleStars].classList.add("active", "animate");
+      visibleStars++;
+      setTimeout(() => activateStars(count), 500);
+    }
+  }
+
+  activateStars(2);
 }
 
 function onSubmit() {

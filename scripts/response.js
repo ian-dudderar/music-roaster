@@ -29,14 +29,14 @@ function loadStars() {
     const startPosition = (starContainer.offsetWidth - totalWidth) / 2;
 
     for (let i = 0; i < count; i++) {
-      // const position = startPosition + i * (starWidth + gap);
-      // stars[i].style.left = `${position}px`;
+      const position = startPosition + i * (starWidth + gap);
+      stars[i].style.left = `${position}px`;
     }
   }
 
   function activateStars(count) {
     if (visibleStars < count) {
-      // positionStars(visibleStars + 1);
+      positionStars(visibleStars + 1);
       stars[visibleStars].classList.add("active", "animate");
       visibleStars++;
       setTimeout(() => activateStars(count), 500);

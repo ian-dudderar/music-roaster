@@ -50,6 +50,7 @@ function selectPlaylist(playlist) {
   var id = playlist.id;
   var playlistPhoto = playlist.image.url;
   sessionStorage.setItem("playlistPhoto", playlistPhoto);
+  sessionStorage.setItem("playlistId", id);
   const previousSelected = document.querySelector(".playlist-item.selected");
   if (previousSelected) {
     previousSelected.classList.remove("selected");
@@ -77,7 +78,12 @@ function updateGradeButton() {
 function initializePage() {
   const playlistGrid = document.getElementById("playlistGrid");
   playlists.forEach((playlist) => {
-    playlistGrid.appendChild(createPlaylistItem(playlist));
+    try {
+      playlistGrid.appendChild(createPlaylistItem(playlist));
+    } catch (e) {
+      console.log(e);
+      console.log(playlist);
+    }
   });
 }
 

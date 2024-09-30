@@ -29,6 +29,11 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// converts boolean strings to booleans
+function parseBoolean(string) {
+  return string === "true" ? true : string === "false" ? false : undefined;
+}
+
 async function getAccessToken(code) {
   return new Promise((resolve, reject) => {
     const myHeaders = new Headers();
@@ -74,13 +79,12 @@ async function getUserProfile(token) {
   });
 }
 
-async function getTrackData(token) {
-  console.log("fetching");
-  console.log(token);
+async function getTrackData(token, grade = false, playlistId = null) {
+  const url = grade
+    ? `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+    : `https://api.spotify.com/v1/me/top/tracks?limit=10`;
 
-  const url = `${API_URL}tracks?limit=10`;
   return new Promise((resolve, reject) => {
-    // var url = `${API_URL}tracks?limit=3`;
     fetch(url, {
       headers: {
         Authorization: "Bearer " + token,
@@ -88,18 +92,18 @@ async function getTrackData(token) {
     })
       .then((response) => response.json())
       .then((result) => {
-        resolve(parseTrackData(result.items));
-        // console.log(result);
+        resolve(parseTrackData(result.items, grade));
       });
   });
 }
 
-function parseTrackData(track_data) {
-  console.log("parsing...");
-  var tracks = [];
-  // console.log(track_data);
-  for (const data of track_data) {
-    var track = {
+function parseTrackData(track_data, grade) {
+  let tracks = [];
+  for (let data of track_data) {
+    if (grade) {
+      data = data.track;
+    }
+    let track = {
       name: data.name,
       artist: data.artists[0].name,
       album_image: data.album.images[0].url,
@@ -301,6 +305,7 @@ app.get("/get-playlists", async (req, res) => {
 });
 
 app.get("/grade", async (req, res) => {
+  // res.sendFile("pages/response.html", { root: __dirname });
   res.sendFile("pages/test.html", { root: __dirname });
 });
 
@@ -317,20 +322,15 @@ app.get("/response", async (req, res) => {
 });
 
 app.get("/response2", async (req, res) => {
-  const token = req.query.token;
-
-  console.log("HIT");
-  // const images = [
-  //   "https://mdn.github.io/learning-area/html/multimedia-and-embedding/tasks/images/images/blueberries.jpg",
-  //   "https://www.adobe.com/creativecloud/photography/discover/media_131179edca5f92db203e2b78cb8a308605afbc958.png?width=2000&format=webply&optimize=medium",
-  // ];
-
-  const tracks = await getTrackData(token);
+  const { token, playlistId } = req.query;
+  const grade = parseBoolean(req.query.grade);
+  const tracks = await getTrackData(token, grade, playlistId);
 
   let trackImages = [];
   for (const track of tracks) {
     trackImages.push(track.album_image);
   }
+
   // const text_res = await getLLMResponse(tracks);
 
   await sleep(3000);
@@ -339,6 +339,7 @@ app.get("/response2", async (req, res) => {
     "Hac feugiat cubilia curae aliquam vehicula diam. Primis nec enimcommodo sapien sagittis fermentum magna. Fermentum vulputate velitturpis pharetra cras euismod. Eget metus pharetra cursus pretium duis venenatis. Senectus vel hendrerit felis, himenaeos mollis finibus. Dignissim porttitor ridiculus ligula tellus ante morbi id elementum primis. Dolor proin mi hendrerit ultricies in felis. Feugiat cras odio tristique; rutrum taciti parturient quis hac. Viverra auctor rhoncus metus; imperdiet diam dui taciti? Lacus phasellus pellentesque tempor scelerisque vestibulum nascetur tincidunt?",
   ];
 
+  // res.send({});
   res.send({ images: trackImages, textRes: fakeres });
 });
 
