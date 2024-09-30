@@ -4,21 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rate My Music</title>
-    <link href="test.css" rel="stylesheet" type="text/css" />
+    <link href="response.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <!-- <div class="loader">
+
+    </div> -->
     <div class="container">
       <header>
-        <!-- make dynamic -->
-        <h1>Grade My Playlist</h1>
-        <div class="user-avatar"></div>
+        <!-- change this, why would id header not be for header lol -->
+        <h1 id="header"></h1>
+        <div id="avatar"></div>
       </header>
       <main>
+        <div class="loading-container">
+          <p id="loading-prompt">
+            Sit back, relax, and let the music speak for itself. Your rating is
+            being calculated now.
+          </p>
+          <div class="progress-bar"></div>
+        </div>
         <div class="response">
-          <div class="playlist-photo">
-            <img id="image" alt="playlist cover" />
-          </div>
-          <div class="rating-text"></div>
           <div id="star-container">
             <svg class="star" viewBox="0 0 24 24">
               <path
@@ -48,8 +54,8 @@
           </div>
         </div>
       </main>
-      <footer>
-        <button id="gradeButton" onClick="onRetry()">Try again?</button>
+      <footer id="footer">
+        <button id="try-again" onclick="onSubmit()" disabled>Try again?</button>
       </footer>
     </div>
 

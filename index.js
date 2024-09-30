@@ -142,33 +142,6 @@ function parsePlaylists(playlists) {
   return data;
 }
 
-async function getPlaylistTracks(token, playlistId) {
-  const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
-  console.log("getting playlist tracks");
-
-  return new Promise((resolve, reject) => {
-    fetch(url, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        resolve(result.items);
-      });
-  });
-}
-
-function parsePlaylistTracks(tracks) {
-  var trackData = [];
-  for (const track of tracks) {
-    const trackName = track.track.name;
-    const trackArist = track.track.artists[0].name;
-    trackData.push({ name: trackName, artist: trackArist });
-  }
-  return trackData;
-}
-
 async function getLLMResponse(tracks) {
   var prompt = `You are a funny music critic, who gives 0-5 star reviews on playlists. (0.5 increments are allowed).  Based on the following playlist information, write 2 brief paragraphs giving a review of the playlist. The 3rd and final paragraph should be ONLY the number 0-5 (0.5 increments) to announce the number of stars the playlist has received.
 To help you with your review, consider the following information. The length of the playlist, the variety of the playlist, and the assumed purpose of the playlist. You should use the name of the playlist to help you determine the strength its content. If you do not understand the playlists name, you may disregard it. Because your review is brief, you should be fairly direct and to the point, with maybe a quick joke or two, and some constructive criticism or some acknowledgement of things they did poorly. `;
@@ -247,7 +220,6 @@ app.get("/callback", (req, res) => {
 });
 
 app.get("/main", async (req, res) => {
-  // console.log(req.query);
   var code = req.query.code || null;
   var state = req.query.state || null;
 
@@ -265,33 +237,11 @@ app.get("/main", async (req, res) => {
   token = await getAccessToken(code);
   const profileImg = await getUserProfile(token);
 
-  // const tracks = await getTrackData(token);
-  // const text_res = await getLLMResponse(tracks);
-  // var albums = [];
-  // for (const track of tracks) {
-  //   albums.push(track.album_image);
-  // }
-
-  // const data_response = {
-  //   albums_res: albums,
-  //   text_res: text_res,
-  // };
-
-  // console.log(data_response);
-
-  // var token = "";
-  // var profileImg = "";
-  // console.log("returning response");
   res.send({ response: { token: token, profileImg: profileImg } });
-  // res.send({ response: data_response });
 });
 
-// app.get("/roast", (req, res) => {
-//   res.sendFile("pages/roaster.html", { root: __dirname });
-// });
-
 app.get("/roast", (req, res) => {
-  res.sendFile("pages/test.html", { root: __dirname });
+  res.sendFile("pages/response.html", { root: __dirname });
 });
 
 app.get("/select-playlist", (req, res) => {
@@ -305,23 +255,11 @@ app.get("/get-playlists", async (req, res) => {
 });
 
 app.get("/grade", async (req, res) => {
-  // res.sendFile("pages/response.html", { root: __dirname });
-  res.sendFile("pages/test.html", { root: __dirname });
+  res.sendFile("pages/response.html", { root: __dirname });
+  // res.sendFile("pages/test.html", { root: __dirname });
 });
 
 app.get("/response", async (req, res) => {
-  console.log("HIT");
-  // console.log(req.query.token);
-  // console.log(req.query.playlistId);
-  const token = req.query.token;
-  const playlistId = req.query.playlistId;
-  const tracks = await getPlaylistTracks(token, playlistId);
-  var trackData = parsePlaylistTracks(tracks);
-
-  res.send({ response: "response" });
-});
-
-app.get("/response2", async (req, res) => {
   const { token, playlistId } = req.query;
   const grade = parseBoolean(req.query.grade);
   const tracks = await getTrackData(token, grade, playlistId);

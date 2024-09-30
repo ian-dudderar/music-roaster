@@ -20,7 +20,7 @@ async function onLoad() {
     avatarImg.src = avatar;
     avatarContainer.appendChild(avatarImg);
   }
-  fetch(`/response2?token=${token}`).then((res) => {
+  fetch(`/response?token=${token}`).then((res) => {
     res.json().then((data) => {
       console.log(data);
       // const loader = document.querySelector(".progress-bar");
