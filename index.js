@@ -3,8 +3,8 @@ const app = express();
 const port = 3000;
 var path = require("path");
 
-var randomstring = require("randomstring");
-const querystring = require("querystring");
+// var randomstring = require("randomstring");
+// const querystring = require("querystring");
 
 require("dotenv").config();
 const client_id = process.env.CLIENT_ID;
@@ -13,6 +13,9 @@ const openai_key = process.env.OPENAI_KEY;
 
 const LOCAL_URL = process.env.LOCAL_URL;
 const API_URL = "https://api.spotify.com/v1/me/top/";
+
+const authentication = require("./routes/authentication");
+const main = require("./routes/main");
 
 const { OpenAI } = require("openai");
 const openai = new OpenAI({
@@ -46,7 +49,7 @@ async function getAccessToken(code) {
     const urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "authorization_code");
     urlencoded.append("code", code);
-    urlencoded.append("redirect_uri", `${LOCAL_URL}/callback`);
+    urlencoded.append("redirect_uri", `${LOCAL_URL}/spotify/callback`);
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -185,60 +188,36 @@ To help you with your review, consider the following information. The length of 
 
 //---------End Helper Functions---------
 
+app.use("/spotify", authentication);
+app.use("/main", main);
+
 //-----Routes------
 // Index Page
 app.get("/", (req, res) => {
   res.sendFile("pages/index.html", { root: __dirname });
 });
 
-//Spotify User Auth
-app.get("/authenticate", (req, res) => {
-  var state = randomstring.generate(16);
-  var scope =
-    "user-top-read playlist-read-private user-read-private user-read-email";
-  res.redirect(
-    "https://accounts.spotify.com/authorize?" +
-      querystring.stringify({
-        response_type: "code",
-        scope: scope,
-        state: state,
-        show_dialog: true,
-        redirect_uri: `${LOCAL_URL}/callback`,
-        client_id: client_id,
-      })
-  );
-});
+// app.get("/main", async (req, res) => {
+//   console.log("HIT MAIN");
+//   var code = req.query.code || null;
+//   var state = req.query.state || null;
 
-// Callback function for spotify authentication
-app.get("/callback", (req, res) => {
-  if (req.query.error) {
-    console.log("ERROR");
-    res.redirect("/error");
-  } else {
-    res.sendFile("pages/main.html", { root: __dirname });
-  }
-});
+//   // // Check to ensure the user has been properly authenticated
+//   // if (state === null) {
+//   //   return res.redirect(
+//   //     "/" + querystring.stringify({ error: "State mismatch" })
+//   //   );
+//   // } else if (code === null) {
+//   //   return res.redirect("/" + querystring.stringify({ error: "Login failed" }));
+//   // }
 
-app.get("/main", async (req, res) => {
-  var code = req.query.code || null;
-  var state = req.query.state || null;
+//   // Exchange the authorization code for an access token
+//   // One the access token is received, redirects the user to the user page and passes the token
+//   token = await getAccessToken(code);
+//   const profileImg = await getUserProfile(token);
 
-  // // Check to ensure the user has been properly authenticated
-  // if (state === null) {
-  //   return res.redirect(
-  //     "/" + querystring.stringify({ error: "State mismatch" })
-  //   );
-  // } else if (code === null) {
-  //   return res.redirect("/" + querystring.stringify({ error: "Login failed" }));
-  // }
-
-  // Exchange the authorization code for an access token
-  // One the access token is received, redirects the user to the user page and passes the token
-  token = await getAccessToken(code);
-  const profileImg = await getUserProfile(token);
-
-  res.send({ response: { token: token, profileImg: profileImg } });
-});
+//   res.send({ response: { token: token, profileImg: profileImg } });
+// });
 
 app.get("/roast", (req, res) => {
   res.sendFile("pages/response.html", { root: __dirname });

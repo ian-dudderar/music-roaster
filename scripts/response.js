@@ -239,7 +239,7 @@ function textTypewriterEffect(element, text, useCursor, i = 0) {
 
 function onSubmit() {
   sessionStorage.setItem("grade", false);
-  window.location.href = "/callback";
+  window.location.href = "/spotify/callback";
 }
 
 document.addEventListener("DOMContentLoaded", initializePage);
