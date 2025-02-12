@@ -1,3 +1,17 @@
+This is a work-in-progress personal project I started out of curiosity of the Spotify API, as well as the drive to create something
+funny for my friends.
+
+The idea is to serve as mobile-friendly web application that allows the user to connect their Spotify account,
+and have their music library 'roasted' by OpenAI.
+
+I then wanted to take it a step further, and give them the ability to have their Spotify playlists rated
+on a scale of 1-5 stars, in order to generate return usability.
+
+All of this functionality exists in the code, but I got hung-up on the design aspect, as I could not find 
+a way to display the AI's response in a manner I thought acceptable for production-level deployment.
+
+
+
 npm run start
 
 Spotify Auth used here
